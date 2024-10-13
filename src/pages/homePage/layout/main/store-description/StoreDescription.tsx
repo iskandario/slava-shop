@@ -1,5 +1,6 @@
 import React from 'react';
-import Photo from "../../../../../assets/images/catalogmain_photo.jpg";
+import LargePhoto from "../../../../../assets/images/catalogmain_photo.jpg";
+import SmallPhoto from "../../../../../assets/images/smallMainPage.jpg";
 import {
 	FirstBigDiv, FourTextDiv,
 	OneTextDiv,
@@ -34,7 +35,11 @@ export const StoreDescription = ({ scrollToCatalog }: StoreDescriptionProps) => 
 					<ThreeTextDiv>
 						<PhotoDescription>
 							<a onClick={handleCatalogClick}>К каталогу →</a>
-							<img src={Photo} alt="#" />
+							{/* Используем тег <picture> для замены изображений */}
+							<picture>
+								<source media="(max-width: 1000px)" srcSet={SmallPhoto} />
+								<img src={LargePhoto} alt="Main Catalog" />
+							</picture>
 						</PhotoDescription>
 					</ThreeTextDiv>
 					<FourTextDiv>

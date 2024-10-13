@@ -37,7 +37,9 @@ export const Basket = (props: Props) => {
 
 	return (
 		<StyledBasket>
-			<BackButton />
+			<StyledBackButton>
+        <BackButton />
+      </StyledBackButton>
 			<div>Корзина</div>
 			{basket.length === 0 ? (
 				<EmptyBasket>Ваша корзина пуста</EmptyBasket>
@@ -137,7 +139,7 @@ const StyledButton = styled(Button)`
   && {
     font-size: 16px;
     background-color: ${theme.mainBackgroundColor};
-    color: ${theme.secondaryTextColor};
+    color: ${theme.mainTextColor};
     border-radius: 8px;
     padding: 8px 16px;
 
@@ -155,6 +157,27 @@ const SummaryDiv = styled.div`
   justify-content: center;
   align-items: center;
   font-family: "Fira Code", monospace;
+`;
+
+const StyledBackButton = styled.div`
+  position: absolute;
+  top: 30px;
+  z-index: 10;
+
+  button {
+    font-size: 16px;
+    font-family: 'Fira Mono', monospace;
+    background-color: ${theme.mainBackgroundColor};
+    color: ${theme.mainTextColor};
+    border-radius: 8px;
+    padding: 8px 16px;
+
+    &:hover {
+      background-color: transparent;
+      color: ${theme.secondaryTextColor};
+      box-shadow: none;
+    }
+  }
 `;
 
 export default Basket;

@@ -1,16 +1,21 @@
 import { useState } from 'react';
 
-export type ProductType = {
-	id: string;           // Идентификатор продукта
-	title: string;        // Название продукта
-	compound: string;     // Состав продукта (материалы)
-	price: number;        // Цена продукта
-	imgUrl: string;       // URL изображения продукта
-	sizes: string[];      // Доступные размеры
-	size_s_quantity: number;  // Количество для размера S
-	size_m_quantity: number;  // Количество для размера M
-	size_c_quantity: number;  // Количество для размера C
-	sizeSelect?: string
+export type SizeChart = {
+	[key: string]: string; // Динамически любые поля: ширина, длина, длина рукава, обхват груди и т.д.
+  };
+  
+  export type ProductType = {
+    id: string;           // Идентификатор продукта
+    title: string;        // Название продукта
+    compound: string;     // Состав продукта (материалы)
+    price: number;        // Цена продукта
+    imgUrl: string;       // URL изображения продукта
+    sizes: string[];      // Доступные размеры
+    size_s_quantity: number;  // Количество для размера S
+    size_m_quantity: number;  // Количество для размера M
+    size_c_quantity: number;  // Количество для размера C
+    size_chart: Record<string, Record<string, string>>; // Динамическая размерная сетка
+    sizeSelect?: string;   // Выбранный размер (опционально)
 };
 
 const useProducts = (): [ProductType[], React.Dispatch<React.SetStateAction<ProductType[]>>] => {
