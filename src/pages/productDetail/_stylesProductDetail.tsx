@@ -35,7 +35,7 @@ export const Price = styled.p`
 `;
 
 export const Compound = styled.p`
-  margin: 10px 0;
+  margin: 10px 0; 
   font-size: 16px;   /* Сделали текст меньше */
   color: gray;       /* Сделали текст серым */
 `;

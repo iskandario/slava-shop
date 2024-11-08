@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 import styled from "styled-components";
 import { StoreDescription } from "./store-description/StoreDescription";
@@ -15,7 +14,7 @@ export const Main = ({ scrollToCatalog }: MainProps) => {
       <PhotoWrapper>
         <picture>
           <source media="(max-width: 1000px)" srcSet={smallmainPhoto} />
-          <img src={mainPhoto} alt="Главное фото" />
+          <StyledImg src={mainPhoto} alt="Главное фото" />
         </picture>
       </PhotoWrapper>
       <StoreDescription scrollToCatalog={scrollToCatalog} />
@@ -25,43 +24,32 @@ export const Main = ({ scrollToCatalog }: MainProps) => {
 
 const PhotoWrapper = styled.div`
   position: relative;
-  margin-top: 60px; /* Отступ сверху, чтобы не перекрывать хедер */
-
-  &::before {
-    font-family: "NEXT ART", monospace;
-    position: absolute;
-    line-height: 96%;
-    top: 29px;
-    right: 14%;
-    color: #ffffff;
-    content: 'Ss’24 white swan';
-    font-weight: bold;
-    max-width: 136px;
-    max-height: 89px;
-    font-size: 2rem;
-    z-index: 2;
-  }
-
-  max-height: 530px;
+  margin-top: 60px;
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.16);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
+  padding-top: 27.55%; /* Соотношение сторон 529 / 1920 * 100 = 27.55% */
+  overflow: hidden;
 
   @media (max-width: 1000px) {
-    margin-top: 80px; /* Увеличиваем отступ для мобильной версии */
+    padding-top: 120%; /* Задаем более высокое соотношение для вертикальной ориентации */
+  }
+`;
+
+const StyledImg = styled.img`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Картинка заполнит контейнер, сохраняя пропорции */
+
+  @media (max-width: 1000px) {
+    object-fit: contain; /* На мобильных устройствах изображение будет целиком помещаться в контейнер */
+    height: auto;
   }
 `;
 
 const StyledMain = styled.section`
   display: flex;
   flex-direction: column;
-  min-height: 1082px;
+  width: 100%;
 `;

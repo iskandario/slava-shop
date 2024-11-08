@@ -5,7 +5,7 @@ import { Box, Typography, CircularProgress } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import styled from 'styled-components';
-import { useBasket } from '../basket/BasketContext'; // Импортируем useBasket для очистки корзины
+import { useBasket } from '../basket/BasketContext';
 
 interface RouteParams {
   [key: string]: string | undefined;
@@ -14,40 +14,42 @@ interface RouteParams {
 const PaymentStatus = () => {
     const [paymentStatus, setPaymentStatus] = useState<'pending' | 'succeeded' | 'failed' | 'error'>('pending');
     const { orderId } = useParams<RouteParams>();
-    const { clearBasket } = useBasket(); // Получаем функцию для очистки корзины
+    const { clearBasket } = useBasket();
 
-    const pollPaymentStatus = useCallback((orderId: string) => {
-        axios.get(`https://vyacheslavna.ru/check_payment_status.php?order_id=${orderId}`, {
-            headers: {
-                'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
-                'Pragma': 'no-cache',
-                'Expires': '0'
-            }
-        })
-        .then(response => {
-            if (response.data && response.data.status) {
-                setPaymentStatus(response.data.status);
-
-                if (response.data.status === 'succeeded') {
-                    // Очищаем корзину при успешной оплате
-                    clearBasket();
+    // Функция для проверки статуса оплаты
+    const pollPaymentStatus = useCallback(async () => {
+        try {
+            const response = await axios.get(`https://vyacheslavna.ru/check_payment_status.php?order_id=${orderId}`, {
+                headers: {
+                    'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+                    'Pragma': 'no-cache',
+                    'Expires': '0'
+                }
+            });
+            
+            const status = response.data?.status;
+            if (status) {
+                setPaymentStatus(status);
+                if (status === 'succeeded') {
+                    clearBasket(); // Очистка корзины при успешной оплате
                 }
             } else {
                 setPaymentStatus('error');
             }
-        })
-        .catch(error => {
-            setPaymentStatus('error');
-        });
-    }, [clearBasket]);
-
-    useEffect(() => {
-        if (orderId) {
-            pollPaymentStatus(orderId);
-        } else {
+        } catch {
             setPaymentStatus('error');
         }
-    }, [orderId, pollPaymentStatus]);
+    }, [orderId, clearBasket]);
+
+    useEffect(() => {
+        // Устанавливаем интервал опроса только если статус 'pending'
+        if (paymentStatus === 'pending' && orderId) {
+            const intervalId = setInterval(pollPaymentStatus, 5000);
+
+            // Очищаем интервал при успешной оплате или ошибке
+            return () => clearInterval(intervalId);
+        }
+    }, [paymentStatus, orderId, pollPaymentStatus]);
 
     const renderStatusMessage = () => {
         switch (paymentStatus) {

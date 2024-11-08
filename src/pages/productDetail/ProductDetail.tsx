@@ -11,16 +11,23 @@ import {
   StyledProductDetail,
   Title
 } from "./_stylesProductDetail";
-import ProductGallery from "./ProductGallary";
+import ProductGallery from "./ProductGallery";
 
 type ProductDetailProps = {
   products: ProductType[];
 };
 
+const modelUrls: { [key: string]: string } = {
+  pinkShirt: 'https://vyacheslavna.ru/images/pink_shirt.jpg',
+  jacket: 'https://vyacheslavna.ru/images/jacket.jpg',
+  corset: 'https://vyacheslavna.ru/images/corset.jpg',
+  dress: 'https://vyacheslavna.ru/images/dress.jpg',
+  blueShirt: 'https://vyacheslavna.ru/images/blue_shirt.jpg',
+  batistSet: 'https://vyacheslavna.ru/images/batist_big.jpg',
+  skirt: 'https://vyacheslavna.ru/images/skirt.jpg',
+};
 const ProductDetail = ({ products }: ProductDetailProps) => {
   const { id } = useParams<{ id: string }>();
-  
-  // Получаем данные продукта из списка продуктов
   const product = products.find((product) => product.id === id);
 
   const { addToBasket } = useBasket();
@@ -46,13 +53,11 @@ const ProductDetail = ({ products }: ProductDetailProps) => {
     }
   };
 
-  // Приведение типов для динамической индексации
   const getSizeQuantity = (size: string) => {
     const sizeKey = `size_${size.toLowerCase()}_quantity` as keyof ProductType;
     return product[sizeKey] as number;
   };
 
-  // Заголовки в зависимости от ключей размерной сетки
   const getHeaderNames = (sizeChart: Record<string, any>) => {
     const firstSize = Object.keys(sizeChart)[0];
     if (!firstSize) return [];
@@ -72,7 +77,7 @@ const ProductDetail = ({ products }: ProductDetailProps) => {
       case 'waist_circumference':
         return 'Обхват талии';
       default:
-        return key; // возвращаем ключ, если его нет в маппинге
+        return key;
     }
   };
 
@@ -81,7 +86,10 @@ const ProductDetail = ({ products }: ProductDetailProps) => {
       <StyledProductDetail>
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
-            <ProductGallery images={[product.imgUrl]} />
+            <ProductGallery 
+              images={[product.imgUrl]} 
+              modelPath="/models/jacket_model.glb" 
+            />
           </Grid>
 
           <Grid item xs={12} md={6}>
@@ -89,7 +97,6 @@ const ProductDetail = ({ products }: ProductDetailProps) => {
             <Compound>{product.compound}</Compound>
             <Price>{product.price}₽</Price>
 
-            {/* Отображение размеров как кнопок */}
             <SizeSelector>
               {product.sizes.map((size) => (
                 <SizeButton
@@ -98,12 +105,11 @@ const ProductDetail = ({ products }: ProductDetailProps) => {
                   isAvailable={getSizeQuantity(size) > 0}
                   onClick={() => handleSizeChange(size)}
                 >
-                  {size}
+                  <span>{size}</span>
                 </SizeButton>
               ))}
             </SizeSelector>
 
-            {/* Отображение размерной сетки */}
             {product.size_chart ? (
               <SizeChartWrapper>
                 <SizeRow>
@@ -139,20 +145,53 @@ const ProductDetail = ({ products }: ProductDetailProps) => {
   );
 };
 
-// Стили для селектора размеров
+// Стили
 const SizeSelector = styled.div`
   display: flex;
   margin-bottom: 16px;
 `;
 
 const SizeButton = styled.div<{ isSelected: boolean; isAvailable: boolean }>`
+  position: relative;
   padding: 8px 16px;
-  margin-right: 8px;
-  border: 1px solid ${({ isSelected }) => (isSelected ? 'black' : '#ddd')};
-  background-color: ${({ isAvailable }) => (isAvailable ? 'white' : '#f4f4f4')};
-  color: ${({ isAvailable }) => (isAvailable ? 'black' : '#aaa')};
+  font-size: 24px;
+  color: ${({ isAvailable, isSelected }) => 
+    isAvailable ? (isSelected ? 'black' : '#333') : '#ccc'};
+  font-weight: ${({ isSelected }) => (isSelected ? 'bold' : 'normal')};
   cursor: ${({ isAvailable }) => (isAvailable ? 'pointer' : 'not-allowed')};
   opacity: ${({ isAvailable }) => (isAvailable ? 1 : 0.5)};
+  transition: transform 0.2s ease, color 0.2s ease;
+  border-radius: 4px;
+
+  &:hover span, &:focus span {
+    transform: ${({ isAvailable }) => (isAvailable ? 'scale(1.1)' : 'none')};
+    color: ${({ isAvailable }) => (isAvailable ? 'black' : '#ccc')};
+  }
+
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: ${({ isAvailable, isSelected }) =>
+      isSelected ? 'black' : (isAvailable ? '#333' : '#ccc')};
+    transition: background-color 0.3s;
+  }
+
+  &:not(:last-child)::before {
+    content: '/';
+    position: absolute;
+    right: -10px;
+    color: #ccc;
+    font-size: 24px;
+  }
+
+  span {
+    display: inline-block;
+    transition: transform 0.2s ease, color 0.2s ease;
+  }
 `;
 
 const StyledProductPage = styled.div`

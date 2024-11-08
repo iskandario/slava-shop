@@ -80,9 +80,7 @@ export const StyledMainGrid = styled.div`
     }
   }
 
-  @media (max-width: 600px) {
-    font-size: 10px;
-  }
+ 
 `;
 
 export const PhotoDescription = styled.div`
@@ -93,13 +91,23 @@ export const PhotoDescription = styled.div`
   @media (max-width: 1000px) {
     align-items: center;
   }
+
+   @media (min-width: 1500px) {
+    width: calc(10px + 10vw); 
+   }
+
 `;
 
 export const FirstBigDiv = styled.div`
   height: 100%;
   display: flex;
+  gap: 50px;
   justify-content: space-between;
   align-items: center;
+  margin-right: 60px;
+  margin-left: -120px;
+
+  
 
   @media (max-width: 1000px) {
     display: none; /* Убираем первый текстовый блок на экранах меньше 1000px */
@@ -121,11 +129,14 @@ export const SecondBigDiv = styled.div`
   }
 `;
 
+
 export const OneTextDiv = styled.div`
   align-self: flex-start;
-
+  font-size: calc(9px + 0.5vw); /* Шрифт будет увеличиваться с размером экрана */
+  margin-right: 10px;
   @media (max-width: 1000px) {
     margin-bottom: 20px;
+    font-size: calc(10px + 0.3vw); /* Шрифт уменьшится на меньших экранах, но не сильно */
   }
 `;
 
@@ -133,15 +144,21 @@ export const TwoTextDiv = styled.div`
   align-self: flex-end;
   margin-left: 35px;
   margin-bottom: 50px;
+  font-size: calc(9px + 0.5vw);
 
   @media (max-width: 1000px) {
     margin-left: 0;
+    font-size: calc(10px + 0.3vw);
   }
+    @media (min-width: 1500px) {
+    margin-left: calc(10px + 10vw);
+}
 `;
 
 export const ThreeTextDiv = styled.div`
   margin-right: 244px;
   margin-top: 130px;
+  font-size: calc(9px + 0.5vw);
 
   @media (max-width: 1750px) {
     margin-right: 150px;
@@ -156,6 +173,7 @@ export const ThreeTextDiv = styled.div`
   @media (max-width: 1000px) {
     margin-right: 0;
     margin-top: 50px;
+    font-size: calc(10px + 0.3vw);
   }
 `;
 
@@ -163,13 +181,12 @@ export const FourTextDiv = styled.div`
   width: 212px;
   line-height: 1.5;
   margin-top: 80px;
+  font-size: calc(9px + 0.5vw);
+
 
   p {
     width: 100%;
   }
 
-  @media (max-width: 1000px) {
-    margin-top: 30px;
-    font-size: 1rem; /* Увеличение размера текста на мобильных */
-  }
+
 `;
