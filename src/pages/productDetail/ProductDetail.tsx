@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Grid from "@mui/material/Grid";
+import { NavLink, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useBasket } from "../basket/BasketContext";
+import { theme } from '../../_globalStyles/theme';
 import { ProductType } from "../../store/useProducts";
+import { ThemeProvider } from '@mui/material/styles';
+import themes from './ThemeProvider';
 import {
   Compound,
   Price,
@@ -12,50 +16,163 @@ import {
   Title
 } from "./_stylesProductDetail";
 import ProductGallery from "./ProductGallery";
+import BackButton from "../../components/BackButton"; 
+
+
+const imageUrls: { [key: string]: string[] } = {
+  "1": [
+    "https://vyacheslavna.ru/SOURCE/images/product_detail_photos/pink1.jpg",
+    "https://vyacheslavna.ru/SOURCE/images/product_detail_photos/pink2.jpg"
+  ],
+  "2": ["https://vyacheslavna.ru/SOURCE/images/product_detail_photos/jacket.jpg"],
+  "3": ["https://vyacheslavna.ru/SOURCE/images/product_detail_photos/corset.jpg"],
+  "4": ["https://vyacheslavna.ru/SOURCE/images/product_detail_photos/shirt1.jpg",
+        "https://vyacheslavna.ru/SOURCE/images/product_detail_photos/shirt2.jpg"
+  ],
+  "5": ["https://vyacheslavna.ru/SOURCE/images/product_detail_photos/skirt1.jpg"],
+  "6": [
+    "https://vyacheslavna.ru/SOURCE/images/product_detail_photos/blue_shirt1.jpg",
+    "https://vyacheslavna.ru/SOURCE/images/product_detail_photos/blue_shirt2.jpg"
+  ],
+  "7": ["https://vyacheslavna.ru/SOURCE/images/product_detail_photos/dress.jpg"],
+};
+
+const modelPaths: { [key: string]: string } = {
+  "1": "https://vyacheslavna.ru/SOURCE/models/pink_shirt.glb",
+  "2": "https://vyacheslavna.ru/SOURCE/models/jacket_model3.glb",
+  "3": "https://vyacheslavna.ru/SOURCE/models/corset.glb",
+  "4": "https://vyacheslavna.ru/SOURCE/models/batist.glb",
+  "5": "https://vyacheslavna.ru/SOURCE/models/batist.glb",
+  "6": "https://vyacheslavna.ru/SOURCE/models/blue_shirt.glb",
+  "7": "https://vyacheslavna.ru/SOURCE/models/dress.glb",
+};
 
 type ProductDetailProps = {
   products: ProductType[];
 };
 
-const modelUrls: { [key: string]: string } = {
-  pinkShirt: 'https://vyacheslavna.ru/images/pink_shirt.jpg',
-  jacket: 'https://vyacheslavna.ru/images/jacket.jpg',
-  corset: 'https://vyacheslavna.ru/images/corset.jpg',
-  dress: 'https://vyacheslavna.ru/images/dress.jpg',
-  blueShirt: 'https://vyacheslavna.ru/images/blue_shirt.jpg',
-  batistSet: 'https://vyacheslavna.ru/images/batist_big.jpg',
-  skirt: 'https://vyacheslavna.ru/images/skirt.jpg',
-};
 const ProductDetail = ({ products }: ProductDetailProps) => {
+
   const { id } = useParams<{ id: string }>();
   const product = products.find((product) => product.id === id);
-
   const { addToBasket } = useBasket();
   const [selectedSize, setSelectedSize] = useState<string>('');
+  const [animateSizes, setAnimateSizes] = useState(false);
+  const [sizeError, setSizeError] = useState(false);
+  const [isAddedToBasket, setIsAddedToBasket] = useState(false);
+
+  const sortSizeChart = (sizeChart: Record<string, Record<string, string>>): Record<string, Record<string, string>> => {
+    const priorityOrder = ['S', 'M'];
+    return Object.fromEntries(
+      Object.entries(sizeChart).sort(([keyA], [keyB]) => {
+        const indexA = priorityOrder.indexOf(keyA);
+        const indexB = priorityOrder.indexOf(keyB);
+        if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+        if (indexA !== -1) return -1;
+        if (indexB !== -1) return 1;
+        return keyA.localeCompare(keyB);
+      })
+    );
+  };
+  
+
+  const [pressedButton, setPressedButton] = useState<string | null>(null);
+  const handleMouseDown = (size: string) => {
+    setPressedButton(size);
+  };
+  const handleMouseUp = () => {
+    setPressedButton(null); // Сбрасываем активную кнопку
+  };
+  
+  const handleMouseLeave = () => {
+    setPressedButton(null); // Сбрасываем активную кнопку при уходе курсора
+  };
+  
+  const areSizesAvailable = () => {
+    if (!product) return false; // Проверяем, существует ли продукт
+    return product.sizes.length === 1 && product.sizes[0] === "Единый размер"
+      ? product.size_c_quantity > 0
+      : product.sizes.some((size) => getSizeQuantity(size) > 0);
+  };
+  
+  
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Логируем размерную сетку в консоль
+    if (product && product.size_chart) {
+      console.log(`Размерная сетка для продукта ${product.title}:`, product.size_chart);
+    } else if (product) {
+      console.log(`Для продукта ${product.title} размерная сетка отсутствует.`);
+    }
+  }, [id, product]);
+
+
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+    if (sizeError) {
+      const timer = setTimeout(() => {
+        setSizeError(false);
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [sizeError]);
 
   if (!product) {
     return <div>Товар не найден</div>;
   }
+  const images = imageUrls[id || ''] || [];
+  const modelPath = modelPaths[id || ''];
 
   const handleSizeChange = (size: string) => {
-    setSelectedSize(size);
-  };
+    if (getSizeQuantity(size) > 0) {
+      setSelectedSize(size);
+      setSizeError(false);
 
-  const handleAddToBasket = () => {
-    if (selectedSize) {
-      const productWithSize: ProductType = { ...product, sizeSelect: selectedSize };
-      addToBasket(productWithSize);
-      setSelectedSize('');
     }
   };
 
+  
+
+  const handleAddToBasket = () => {
+    if (product.sizes.length === 1 && product.sizes[0] === "Единый размер") {
+      const productWithSize: ProductType = { ...product, sizeSelect: "Единый размер" };
+      addToBasket(productWithSize);
+      setIsAddedToBasket(true);
+      setSizeError(false);
+    } else if (product.sizes.filter((size) => getSizeQuantity(size) > 0).length === 1) {
+      // Единственный доступный размер
+      const availableSize = product.sizes.find((size) => getSizeQuantity(size) > 0);
+      if (availableSize) {
+        const productWithSize: ProductType = { ...product, sizeSelect: availableSize };
+        addToBasket(productWithSize);
+        setIsAddedToBasket(true);
+        setSizeError(false);
+      }
+    } else if (selectedSize) {
+      const productWithSize: ProductType = { ...product, sizeSelect: selectedSize };
+      addToBasket(productWithSize);
+      setSelectedSize('');
+      setIsAddedToBasket(true);
+      setSizeError(false);
+    } else {
+      setSizeError(true);
+      setAnimateSizes(true);
+      setTimeout(() => setAnimateSizes(false), 500);
+    }
+  };
+
+
+
+
+
   const getSizeQuantity = (size: string) => {
+    if (size === "Единый размер") {
+      return product.size_c_quantity || 0; 
+    }
     const sizeKey = `size_${size.toLowerCase()}_quantity` as keyof ProductType;
-    return product[sizeKey] as number;
+    return product[sizeKey] as number || 0;
   };
 
   const getHeaderNames = (sizeChart: Record<string, any>) => {
@@ -67,48 +184,139 @@ const ProductDetail = ({ products }: ProductDetailProps) => {
   const getLabelText = (key: string) => {
     switch (key) {
       case 'width':
-        return 'Ширина';
+        return (
+          <>
+            Ширина
+          </>
+        );
       case 'length':
-        return 'Длина';
+        return (
+          <>
+            Длина
+          </>
+        );
       case 'sleeve_length':
-        return 'Длина рукава';
+        return (
+          <>
+            Длина
+            <br />
+            рукава
+          </>
+        );
       case 'chest_circumference':
-        return 'Обхват груди';
+        return (
+          <>
+            Обхват
+            <br />
+            груди
+          </>
+        );;
       case 'waist_circumference':
-        return 'Обхват талии';
+        return (
+          <>
+            Обхват
+            <br />
+            талии
+          </>
+        );
+      case 'up_length':
+        return (
+          <>
+            Длина
+            <br />
+            верха
+          </>
+        );
+      case 'skirt_length':
+        return (
+          <>
+            Длина
+            <br />
+            юбки
+          </>
+        );
+          
       default:
         return key;
     }
   };
 
   return (
+    <ThemeProvider theme={themes}>
     <StyledProductPage>
+         <StyledBackButton>
+        <BackButton />
+      </StyledBackButton>
       <StyledProductDetail>
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={6}>
-            <ProductGallery 
-              images={[product.imgUrl]} 
-              modelPath="/models/jacket_model.glb" 
-            />
-          </Grid>
+        
+        <Grid container spacing={{xs: 0, md: 12 }}>
+          <LeftGrid item xs={12} md={6}>
+            <ProductGallery images={images} modelPath={modelPath} productId={id || ''} />
+          </LeftGrid>
 
-          <Grid item xs={12} md={6}>
-            <Title>{product.title}</Title>
-            <Compound>{product.compound}</Compound>
-            <Price>{product.price}₽</Price>
+          <RightGrid item xs={12} md={6}
+          sx={{
+            paddingLeft: { xs: '0', md: '100px' }, 
+          }}
+          
+          >
+            <MobileLayout>
+              <TitleCompoundWrapper>
+                <Title>{product.title}</Title>
+                <Compound>{product.compound}</Compound>
+              </TitleCompoundWrapper>
 
-            <SizeSelector>
-              {product.sizes.map((size) => (
-                <SizeButton
-                  key={size}
-                  isSelected={size === selectedSize}
-                  isAvailable={getSizeQuantity(size) > 0}
-                  onClick={() => handleSizeChange(size)}
-                >
-                  <span>{size}</span>
-                </SizeButton>
-              ))}
-            </SizeSelector>
+              <PriceSize>
+              <Price>{product.price}₽
+              </Price>
+
+
+              <PositioningWrapper>
+
+              <SizeSelectorWrapper>
+              {sizeError && <SizeErrorMessage>Выберите размер</SizeErrorMessage>}
+
+              <SizeSelector>
+                {product.sizes.length === 1 && product.sizes[0] === "Единый размер" ? (
+                  product.size_c_quantity > 0 ? (
+                    <NoSizesAvailable>Единый размер</NoSizesAvailable>
+                  ) : (
+                    <NoSizesAvailable>Нет в наличии</NoSizesAvailable>
+                  )
+                ) : product.sizes.filter((size) => getSizeQuantity(size) > 0).length === 1 ? (
+                  product.sizes.map((size) =>
+                    getSizeQuantity(size) > 0 ? (
+                      <NoSizesAvailable key={size}>{size}</NoSizesAvailable>
+                    ) : null
+                  )
+                ) : areSizesAvailable() ? (
+                  product.sizes.map((size, index) => (
+                    <SizeButton
+                      key={size}
+                      $isselected={size === selectedSize}
+                      $ispressed={pressedButton === size}
+                      $isavailable={getSizeQuantity(size) > 0}
+                      onClick={() => {
+                        setPressedButton(size);
+                        setTimeout(() => setPressedButton(null), 200);
+                        handleSizeChange(size);
+                      }}
+                    >
+                      <span>{size}</span>
+                      {index < product.sizes.length - 1 && <SlashDivider>/</SlashDivider>}
+                    </SizeButton>
+                  ))
+                ) : (
+                  <NoSizesAvailable>Нет в наличии</NoSizesAvailable>
+                )}
+              </SizeSelector>
+
+              </SizeSelectorWrapper>
+              </PositioningWrapper>
+
+              </PriceSize>
+
+            </MobileLayout>
 
             {product.size_chart ? (
               <SizeChartWrapper>
@@ -118,10 +326,10 @@ const ProductDetail = ({ products }: ProductDetailProps) => {
                     <SizeHeaderText key={key}>{getLabelText(key)}</SizeHeaderText>
                   ))}
                 </SizeRow>
-                {Object.keys(product.size_chart).map((size) => (
+                {Object.entries(sortSizeChart(product.size_chart)).map(([size, details]) => (
                   <SizeRow key={size}>
                     <SizeHeader>{size}</SizeHeader>
-                    {Object.entries(product.size_chart[size]).map(([key, value]) => (
+                    {Object.entries(details).map(([key, value]) => (
                       <SizeInfo key={key}>{value}</SizeInfo>
                     ))}
                   </SizeRow>
@@ -131,99 +339,337 @@ const ProductDetail = ({ products }: ProductDetailProps) => {
               <div>Размерная сетка недоступна</div>
             )}
 
-            <StyledButton
-              sx={{ textTransform: 'none' }}
-              onClick={handleAddToBasket}
-              disabled={!selectedSize}
-            >
-              Добавить в корзину
-            </StyledButton>
-          </Grid>
+            {areSizesAvailable() && (
+              <StyledAddToBasketButton onClick={handleAddToBasket}>
+                Добавить в корзину
+              </StyledAddToBasketButton>
+              
+            )}
+
+          </RightGrid>
         </Grid>
       </StyledProductDetail>
     </StyledProductPage>
+    </ThemeProvider>
   );
+
 };
 
-// Стили
-const SizeSelector = styled.div`
+const MobileLayout = styled.div`
   display: flex;
-  margin-bottom: 16px;
+  flex-direction: column;
+
+  @media (max-width: 768px) {
+    flex-direction: row; /* В мобильной версии располагаем компоненты горизонтально */
+    justify-content: space-between; /* Разделяем их по краям */
+    align-items: center; /* Центрируем их по вертикали */
+    gap: 8px; /* Уменьшаем расстояние между компонентами */
+  }
 `;
 
-const SizeButton = styled.div<{ isSelected: boolean; isAvailable: boolean }>`
-  position: relative;
-  padding: 8px 16px;
-  font-size: 24px;
-  color: ${({ isAvailable, isSelected }) => 
-    isAvailable ? (isSelected ? 'black' : '#333') : '#ccc'};
-  font-weight: ${({ isSelected }) => (isSelected ? 'bold' : 'normal')};
-  cursor: ${({ isAvailable }) => (isAvailable ? 'pointer' : 'not-allowed')};
-  opacity: ${({ isAvailable }) => (isAvailable ? 1 : 0.5)};
-  transition: transform 0.2s ease, color 0.2s ease;
+const SizeErrorMessage = styled.div`
+  position: absolute; 
+  top: -1vw; /* Выравниваем по верхней границе SizeSelector */
+  left: -calc(100% + 15px); /* Располагаем справа от SizeSelector с отступом */
+  text-align: left; /* Текст слева */
+  font-size: calc(0.6vw + 5px); 
+  color: #ff6b6b; 
+  font-family: "Mira Mono", monospace;
+  opacity: 0.9;
+  white-space: nowrap; /* Отключаем перенос строк */
+  transition: opacity 0.3s ease;
+
+  @media (max-width: 768px) {
+    left: auto; 
+    top: -2vw;
+    right: 0vw; /* Переносим сообщение слева от SizeSelector */
+    text-align: right; /* Текст справа */
+    font-size: calc(0.8vw + 10px); /* Увеличиваем размер шрифта для мобильных */
+  }
+
+
+    @media (max-width: 508px) {
+    left: auto; 
+    top: -2.5vw;
+    right: 0vw; /* Переносим сообщение слева от SizeSelector */
+    text-align: right; /* Текст справа */
+    font-size: calc(0.8vw + 8px); /* Увеличиваем размер шрифта для мобильных */
+  }
+`;
+
+const SizeSelectorWrapper = styled.div`
+  position: relative; 
+  margin-bottom: 20px; 
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+`;
+
+const PositioningWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    gap: 8px;
+  }
+`;
+
+const StyledNavLink = styled(NavLink)`
+  && {
+    margin-top: 20px; /* Добавим отступ между кнопками */
+    font-size: calc(0.7vw + 5px);
+    font-family: "FiraMono", monospace;
+    color: black;
+
+
+  }
+`;
+
+
+const StyledBackButton = styled.div`
+  align-self: flex-start; 
+  margin-top: 2vw;
+  z-index: 10;
+  margin-bottom: 1vw;
+  display: flex; /* Включаем Flexbox */
+  justify-content: flex-start; 
+  text-align: left;
+  margin-left: 10%;
+  button {
+
+    font-size: calc(0.5vw + 10px);
+    font-family: 'Fira Mono', monospace;
+    background-color: ${theme.mainBackgroundColor};
+    color: ${theme.mainTextColor};
+
+    &:hover {
+      background-color: transparent;
+      color: ${theme.secondaryTextColor};
+      box-shadow: none;
+    }
+      @media (max-width: 768px) {
+     font-size: calc(1.2vw + 10px);
+     display: none;
+    }
+  }
+    
+`;
+
+
+const NoSizesAvailable = styled.div`
+  font-size: calc(0.6vw + 5px);
+  color: rgb(24 16 16 / 74%);
+  font-weight: normal;
+  text-align: center;
+  cursor: not-allowed;
+  opacity: 0.5;
+
+  @media (max-width: 768px) {
+    font-size: 2vw;
+  }
+`;
+
+const TitleAndPrice = styled.div`
+  display: flex;
+  flex-direction: column; /* Элементы в столбик по умолчанию */
+  width: 100%;
+  margin-bottom: 16px;
+
+  @media (max-width: 768px) {
+    flex-direction: row; /* Элементы в строку */
+    justify-content: space-between; /* Разделяем элементы */
+    align-items: flex-start; /* Выравниваем элементы по верхнему краю */
+    gap: 10px; /* Добавляем небольшой промежуток */
+  }
+`;
+
+const PriceSize = styled.div`
+display: flex;
+gap: 1.5vw;
+flex-direction: column;
+@media (max-width: 768px) {
+align-items: flex-end;
+margin-top: 5vw;
+  }
+
+`
+const TitleCompoundWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* Добавляем расстояние между Title и Compound */
+
+  @media (max-width: 768px) {
+    gap: 8px; /* Меньший отступ для мобильной версии */
+  }
+`;
+
+export const SizeSelector = styled.div`
+  display: flex;
+  flex-wrap: wrap; /* Разрешаем перенос строк */
+  justify-content: flex-start; /* Кнопки начинаются от левого края */
+  gap: 16px; /* Расстояние между кнопками */
+  margin-top: 10px; 
+  transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+  @media (max-width: 768px) {
+    margin-top: 0; /* Убираем лишние отступы */
+    justify-content: flex-end; 
+  }
+
+
+
+
+
+   @media(max-width: 768px){
+    margin-top: 3vw;
+  }
+`;
+
+const SizeButton = styled.div<{
+  $isselected: boolean;
+  $isavailable: boolean;
+  $ispressed: boolean;
+}>`
+  display: flex;
+  z-index: 10;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(0.7vw + 8px);
+  color: ${({ $isavailable, $isselected }) =>
+    $isavailable ? ($isselected ? 'black' : '#333') : '#ccc'};
+  font-weight: ${({ $isselected }) => ($isselected ? 'bold' : 'normal')};
+  cursor: ${({ $isavailable }) => ($isavailable ? 'pointer' : 'not-allowed')};
+  opacity: ${({ $isavailable }) => ($isavailable ? 1 : 0.5)};
+  transition: transform 0.2s ease, color 0.2s ease, background-color 0.2s ease;
   border-radius: 4px;
+  background-color: ${({ $ispressed }) => ($ispressed ? '#ddd' : 'transparent')};
+  margin: 0;
 
-  &:hover span, &:focus span {
-    transform: ${({ isAvailable }) => (isAvailable ? 'scale(1.1)' : 'none')};
-    color: ${({ isAvailable }) => (isAvailable ? 'black' : '#ccc')};
+  &:active {
+    background-color: #bbb;
   }
 
-  &:after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background-color: ${({ isAvailable, isSelected }) =>
-      isSelected ? 'black' : (isAvailable ? '#333' : '#ccc')};
-    transition: background-color 0.3s;
+  @media (max-width: 768px) {
+    margin-top: -1vw;
+    font-size: calc(1.2vw + 10px);
+  }
+`;
+
+const SlashDivider = styled.span`
+  margin-left: 15px; /* Контролируем отступы вокруг слэша */
+  color: #ccc; /* Добавляем цвет для разделителя */
+  font-size: 1vw;
+
+  @media(max-width: 768px){
+    font-size: 2.5vw;
+  }
+`;
+
+
+const LeftGrid = styled(Grid)`
+
+
+&&{
+
+
+  @media (max-width: 768px) {
+    padding-top: 0vw !important;  
   }
 
-  &:not(:last-child)::before {
-    content: '/';
-    position: absolute;
-    right: -10px;
-    color: #ccc;
-    font-size: 24px;
-  }
+ 
 
-  span {
-    display: inline-block;
-    transition: transform 0.2s ease, color 0.2s ease;
-  }
+}
+`
+
+
+const RightGrid = styled(Grid)`
+
+&&{
+
+ 
+   
 `;
 
 const StyledProductPage = styled.div`
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  padding: 0 0px 20px;
+  justify-content: flex-start;
+  align-items: center; 
+`;
+
+const StyledAddToBasketButton = styled(StyledButton)`
+  && {
+    font-size: calc(0.8vw + 5px);
+    padding-top: 50px;
+    font-family: "FiraMono", monospace;
+    color: black;
+
+     @media (max-width: 768px) {
+     font-size: calc(1.2vw + 10px);
+     }
+  }
 `;
 
 const SizeChartWrapper = styled.div`
   margin-top: 10px;
+
+    @media (min-width:768px) {
+    max-width: 80%;
+   }
 `;
 
 const SizeRow = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 8px 0;
+  align-items: center;
+  padding: 4px 0;
+  flex-wrap: wrap; /* Разрешаем перенос строк */
+  gap: 1vw; /* Отступы между столбцами */
 `;
 
+
 const SizeHeader = styled.div`
-  font-weight: bold;
-  flex: 1;
+  flex: 1; 
+  text-align: center;
+  font-size: calc(0.4vw + 5px);
+  word-wrap: break-word; 
+  white-space: normal; 
+
+   @media (max-width:768px) {
+  font-size: 2.7vw;
+  }
 `;
 
 const SizeInfo = styled.div`
-  flex: 1;
+  flex: 1; 
   text-align: center;
+  font-size: calc(0.4vw + 5px);
+  word-wrap: break-word; 
+  white-space: normal; 
+
+  @media (max-width:768px) {
+  font-size: 2.7vw;
+  }
 `;
 
 const SizeHeaderText = styled.div`
   flex: 1;
   text-align: center;
-  color: #A9A9A9;
+  color: #a7a3a3;
+  font-size: calc(0.4vw + 5px);
+  word-wrap: break-word; 
+  white-space: normal; 
+  
+
+  @media (max-width:768px) {
+  font-size: 2.7vw;
+  }
 `;
 
 export default ProductDetail;

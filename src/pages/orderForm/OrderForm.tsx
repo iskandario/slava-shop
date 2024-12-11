@@ -6,6 +6,8 @@ import { useLocation } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import { ProductType } from "../../store/useProducts";
 import { theme } from "../../_globalStyles/theme";
+import BackButton from "../../components/BackButton";
+
 
 interface OrderFormProps {}
 
@@ -74,6 +76,13 @@ const OrderForm: React.FC<OrderFormProps> = () => {
 
     return (
         <StyledForm onSubmit={handleSubmit(onSubmit)}>
+
+            <Grid container alignItems="center" justifyContent="flex-start">
+            <StyledBackButton>
+                <BackButton />
+            </StyledBackButton>
+            </Grid>
+
             <Grid container spacing={6}> {/* Увеличиваем расстояние между столбцами и строками */}
                 <StyledFieldGrid item xl={4} md={4} xs={12}>
                     <input placeholder={'Фамилия'} {...register("lastName", { required: true })} />
@@ -107,19 +116,50 @@ const OrderForm: React.FC<OrderFormProps> = () => {
                 </StyledFieldGrid>
             </Grid>
 
-            <Grid container alignItems="center" justifyContent="space-between">
-                <TotalPrice>ИТОГО: {total}₽</TotalPrice>
-                <StyledButton sx={{ textTransform: 'none' }} type="submit">Оплатить →</StyledButton>
+            <Grid container alignItems="center" justifyContent="flex-end">
+                <StyledButton sx={{ textTransform: 'none' }} type="submit"><span style={{ borderBottom: '0.9px solid #666' }}>Оплатить →</span></StyledButton>
             </Grid>
         </StyledForm>
     );
 };
 
-// Стили для формы
+
+const StyledBackButton = styled.div`
+  
+  margin-bottom: 4vw;
+  top: 30px;
+  z-index: 10;
+  display: flex; /* Включаем Flexbox */
+  justify-content: center; /* Горизонтальное центрирование */
+
+  button {
+
+    font-size: calc(0.7vw + 10px);
+    font-family: 'Fira Mono', monospace;
+    background-color: ${theme.mainBackgroundColor};
+    color: ${theme.mainTextColor};
+
+    &:hover {
+      background-color: transparent;
+      color: ${theme.secondaryTextColor};
+      box-shadow: none;
+    }
+  @media (max-width: 768px) {
+  font-size: 2.5vw;
+  }
+
+   @media (max-width: 560px) {
+   font-size: 3vw;
+  }
+
+
+
+`;
+
+
 const StyledForm = styled.form`
-    flex-grow: 1;
-  width: 100%;
-  max-width: 1219px;
+  flex-grow: 1;
+  width: 70%;
   font-family: 'NEXT ART', sans-serif !important;
   display: flex;
   flex-direction: column;
@@ -138,17 +178,28 @@ const StyledForm = styled.form`
 
 const StyledButton = styled(Button)`
   && {
-    font-size: 16px;
+    font-size: calc(0.7vw + 10px);
     background-color: ${theme.mainBackgroundColor};
     color: ${theme.mainTextColor};
     border-radius: 8px;
-    padding: 8px 16px;
+    padding-top: 1vw;
+    margin-top: 3vw;
 
     &:hover {
       background-color: transparent;
       color: ${theme.mainTextColor};
       box-shadow: none;
     }
+
+  @media (max-width: 768px) {
+  font-size: 2.5vw;
+  }
+
+   @media (max-width: 560px) {
+   font-size: 3vw;
+  }
+
+    
   }
 `;
 
@@ -156,7 +207,7 @@ const StyledFieldGrid = styled(Grid)`
     margin-bottom: 50px;
 
     input {
-        font-size: 16px;
+        font-size: calc(0.8vw + 7px);
         border: none;
         outline: none;
         border-bottom: 1px solid ${theme.secondaryTextColor};
@@ -177,6 +228,12 @@ const StyledFieldGrid = styled(Grid)`
              -webkit-box-shadow: 0 0 0 1000px ${theme.mainBackgroundColor} inset;
             -webkit-text-fill-color: black;
         }
+              @media (max-width: 768px) {
+             font-size: calc(0.8vw + 10px);
+             }
+
+
+   
     }
 
     span {

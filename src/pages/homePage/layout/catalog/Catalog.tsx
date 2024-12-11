@@ -3,24 +3,25 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { theme } from '../../../../_globalStyles/theme';
 import { ProductType } from "../../../../store/useProducts";
-import fonImage from '/Users/iskandargarifullin/Documents/GitHub/slava-shop/src/assets/images/fon.jpeg';
+import { forwardRef } from 'react';
 
 type CatalogProps = {
   products: ProductType[];
 };
 
-export const Catalog = ({ products }: CatalogProps) => {
+export const Catalog = forwardRef<HTMLDivElement, CatalogProps>(({ products }, ref) => {
+
   const navigate = useNavigate();
 
   // Список URL для изображений
   const imageUrls: { [key: string]: string } = {
-    pinkShirt: 'https://vyacheslavna.ru/images/pink_shirt.jpg',
-    jacket: 'https://vyacheslavna.ru/images/jacket.jpg',
-    corset: 'https://vyacheslavna.ru/images/corset.jpg',
-    dress: 'https://vyacheslavna.ru/images/dress.jpg',
-    blueShirt: 'https://vyacheslavna.ru/images/blue_shirt.jpg',
-    batistSet: 'https://vyacheslavna.ru/images/batist_big.jpg',
-    skirt: 'https://vyacheslavna.ru/images/skirt.jpg',
+    pinkShirt: 'https://vyacheslavna.ru/SOURCE/images/catalog/pink_shirt1.jpg',
+    jacket: 'https://vyacheslavna.ru/SOURCE/images/catalog/jacket.jpg',
+    corset: 'https://vyacheslavna.ru/SOURCE/images/catalog/corset.jpg',
+    dress: 'https://vyacheslavna.ru/SOURCE/images/catalog/dress.jpg',
+    blueShirt: 'https://vyacheslavna.ru/SOURCE/images/catalog/blue_shirt_catalog.jpg',
+    batistSet: 'https://vyacheslavna.ru/SOURCE/images/catalog/batist_big.jpg',
+    skirt: 'https://vyacheslavna.ru/SOURCE/images/catalog/skirt.jpg',
   };
 
   const handleCardClick = (id: string) => {
@@ -48,10 +49,10 @@ export const Catalog = ({ products }: CatalogProps) => {
 
         <GroupedCardContainer>
           <Image src={imageUrls.batistSet} alt="Batist Set" />
-          <Title>Batist Set</Title>
+          <BatistTitle>Batist Set</BatistTitle>
           <GroupedButtons>
-            <TextButton onClick={() => handleCardClick('4')}>Рубашка →</TextButton>
-            <TextButton onClick={() => handleCardClick('5')}>Юбка →</TextButton>
+            <Title onClick={() => handleCardClick('4')}>Рубашка →</Title>
+            <Title onClick={() => handleCardClick('5')}>Юбка →</Title>
           </GroupedButtons>
         </GroupedCardContainer>
 
@@ -70,8 +71,11 @@ export const Catalog = ({ products }: CatalogProps) => {
     );
   };
 
-  return <StyledCatalog>{renderProducts()}</StyledCatalog>;
-};
+  return <StyledCatalog ref={ref}>{renderProducts()}</StyledCatalog>;
+});
+
+Catalog.displayName = "Catalog";
+
 
 const StyledCatalog = styled.section`
   display: grid;
@@ -85,7 +89,7 @@ const StyledCatalog = styled.section`
   padding: 2vw;
   max-width: 100vw;
 
-  @media (max-width: 1000px) {
+  @media (max-width: 768px) {
     grid-template-columns: 1fr;
     grid-template-areas: 
       "pinkShirt"
@@ -94,31 +98,30 @@ const StyledCatalog = styled.section`
       "batistSet"
       "blueShirt"
       "dress";
-    gap: 5vw; /* Меньший отступ между элементами */
+      gap: 5vw;
   }
     @media (min-width: 2000px) {
-      margin: 100px auto;
+      margin-top: 8vw;
     }
       @media (min-width: 2500px) {
-      margin: 120px auto;
+      margin-top: 10vw;
     }
 
       @media (min-width: 2800px) {
-      margin: 170px auto;
+      margin-top: 12vw;
     }
 `;
 
 const SmallCard = styled.div`
   grid-area: pinkShirt;
-  width: 15vw;
-  height: 23vw; /* Пропорционально ширине */
+  width: 12vw;
+  height: 20vw; /* Пропорционально ширине */
   cursor: pointer;
   margin-top: 5vw;
 
-  @media (max-width: 1000px) {
+  @media (max-width: 768px) {
     width: 100%; /* Занимает всю ширину контейнера */
     height: auto;
-    margin: 2vw auto;
   }
 `;
 
@@ -127,7 +130,7 @@ const MediumCard = styled.div`
   height: 35vw;
   cursor: pointer;
 
-  @media (max-width: 1000px) {
+  @media (max-width: 768px) {
     width: 100%; /* Занимает всю ширину */
     height: auto;
     margin: 2vw auto;
@@ -145,7 +148,7 @@ const GroupedCardContainer = styled.div`
   margin-top: 14vw;
   margin-left: 10vw;
 
-  @media (max-width: 1000px) {
+  @media (max-width: 768px) {
     width: 100%;
     height: auto;
     margin: 2vw auto;
@@ -158,7 +161,7 @@ const DoubleCard = styled.div`
   gap: 5vw;
   width: fit-content;
 
-  @media (max-width: 1000px) {
+  @media (max-width: 768px) {
     flex-direction: column;
     width: 100%; /* Занимает всю ширину */
     gap: 2vw;
@@ -172,10 +175,12 @@ const GroupedButtons = styled.div`
 
 const TextButton = styled.h3`
   font-family: "Fira Mono", monospace;
+  font-size: 1vw;
   font-weight: 400;
   cursor: pointer;
-  color: ${theme.secondaryTextColor};
+  color: black;
   border-bottom: 1px solid lightgray;
+
 `;
 
 const StackedCard = styled.div`
@@ -188,7 +193,7 @@ const StackedCard = styled.div`
   width: 80%;
 
 
-  @media (max-width: 1000px) {
+  @media (max-width: 768px) {
     margin: 2vw auto;
     gap: 5vw;
     width: 100%;
@@ -203,15 +208,52 @@ const Image = styled.img`
 `;
 
 export const Title = styled.h3`
+ white-space: nowrap;
   font-family: "Fira Mono", monospace;
+  font-size: calc(1.2vw + 5px);
   font-weight: 400;
   margin-top: 1rem;
   text-align: center;
-  color: ${theme.secondaryTextColor};
+  color: black;
   width: fit-content;
-  border-bottom: 1px solid lightgray;
+  border-bottom: 1px solid gray;
   
   &:hover {
     cursor: pointer;
   }
+
+   @media (max-width: 768px) {
+  font-size: 2.5vw;
+  }
+
+   @media (max-width: 560px) {
+   font-size: 3.5vw;
+  }
+
+
+`;
+
+export const BatistTitle = styled.h3`
+ white-space: nowrap;
+  font-family: "Fira Mono", monospace;
+  font-size: calc(1.2vw + 5px);
+  font-weight: 400;
+  margin-top: 1rem;
+  text-align: center;
+  color: black;
+  width: fit-content;
+  
+  &:hover {
+    cursor: pointer;
+  }
+
+   @media (max-width: 768px) {
+  font-size: 2.5vw;
+  }
+
+   @media (max-width: 560px) {
+   font-size: 3.5vw;
+  }
+
+
 `;

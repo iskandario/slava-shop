@@ -1,114 +1,232 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
-import { Box, Typography, CircularProgress } from '@mui/material';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import styled from 'styled-components';
+import { useParams } from 'react-router-dom';
 import { useBasket } from '../basket/BasketContext';
+import BackButton from "../../components/BackButton";
 
 interface RouteParams {
   [key: string]: string | undefined;
 }
 
 const PaymentStatus = () => {
-    const [paymentStatus, setPaymentStatus] = useState<'pending' | 'succeeded' | 'failed' | 'error'>('pending');
-    const { orderId } = useParams<RouteParams>();
-    const { clearBasket } = useBasket();
+  const [paymentStatus, setPaymentStatus] = useState<'pending' | 'succeeded' | 'failed' | 'error'>('pending');
+  const { orderId } = useParams<RouteParams>();
+  const { clearBasket } = useBasket();
 
-    // Функция для проверки статуса оплаты
-    const pollPaymentStatus = useCallback(async () => {
-        try {
-            const response = await axios.get(`https://vyacheslavna.ru/check_payment_status.php?order_id=${orderId}`, {
-                headers: {
-                    'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
-                    'Pragma': 'no-cache',
-                    'Expires': '0'
-                }
-            });
-            
-            const status = response.data?.status;
-            if (status) {
-                setPaymentStatus(status);
-                if (status === 'succeeded') {
-                    clearBasket(); // Очистка корзины при успешной оплате
-                }
-            } else {
-                setPaymentStatus('error');
-            }
-        } catch {
-            setPaymentStatus('error');
+  // Poll payment status
+  const pollPaymentStatus = useCallback(async () => {
+    try {
+      const response = await axios.get(`https://vyacheslavna.ru/check_payment_status.php?order_id=${orderId}`, {
+        headers: {
+          'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+          'Pragma': 'no-cache',
+          'Expires': '0',
+        },
+      });
+
+      const status = response.data?.status;
+      if (status) {
+        setPaymentStatus(status);
+        if (status === 'succeeded') {
+          clearBasket(); // Clear the basket on successful payment
         }
-    }, [orderId, clearBasket]);
+      } else {
+        setPaymentStatus('error');
+      }
+    } catch {
+      setPaymentStatus('error');
+    }
+  }, [orderId, clearBasket]);
 
-    useEffect(() => {
-        // Устанавливаем интервал опроса только если статус 'pending'
-        if (paymentStatus === 'pending' && orderId) {
-            const intervalId = setInterval(pollPaymentStatus, 5000);
+  useEffect(() => {
+    if (paymentStatus === 'pending' && orderId) {
+      const intervalId = setInterval(pollPaymentStatus, 5000);
 
-            // Очищаем интервал при успешной оплате или ошибке
-            return () => clearInterval(intervalId);
-        }
-    }, [paymentStatus, orderId, pollPaymentStatus]);
+      return () => clearInterval(intervalId);
+    }
+  }, [paymentStatus, orderId, pollPaymentStatus]);
 
-    const renderStatusMessage = () => {
-        switch (paymentStatus) {
-            case 'pending':
-                return (
-                    <>
-                        <CircularProgress color="inherit" />
-                        <p>Ожидание оплаты...</p>
-                    </>
-                );
-            case 'succeeded':
-                return (
-                    <>
-                        <CheckCircleOutlineIcon style={{ color: 'green', fontSize: '2rem' }} />
-                        <p>Оплата прошла успешно!</p>
-                    </>
-                );
-            case 'failed':
-                return (
-                    <>
-                        <ErrorOutlineIcon style={{ color: 'red', fontSize: '2rem' }} />
-                        <p>Оплата не удалась.</p>
-                    </>
-                );
-            case 'error':
-            default:
-                return (
-                    <>
-                        <ErrorOutlineIcon style={{ color: 'red', fontSize: '2rem' }} />
-                        <p>Ошибка при получении статуса. Попробуйте позже.</p>
-                    </>
-                );
-        }
-    };
+  const renderStatusMessage = () => {
+    switch (paymentStatus) {
+      case 'pending':
+        return (
+          <MessageWrapper>
+            <p>Ожидание оплаты...</p>
+          </MessageWrapper>
+        );
+      case 'succeeded':
+        return (
+          <StatusWrapper>
+           <TitleWrapper>
+            <Title>Оплата прошла <br></br>успешно</Title>
+            <CheckMark />
+          </TitleWrapper>
+            <Message>
+              Благодарим Вас за покупку!<br />
+              Мы соберем этот заказ с огромной любовью и заботой!
+            </Message>
+          </StatusWrapper>
+        );
+      case 'failed':
+        return (
+          <StatusWrapper>
+             <TitleWrapper>
+            <Title>Оплата  <br></br>не прошла</Title>
+            <CrossMark />
+          </TitleWrapper>
+            <Message>Попробуйте вернуться и повторить попытку еще раз!</Message>
+          </StatusWrapper>
+        );
+      case 'error':
+      default:
+        return (
+          <StatusWrapper>
+            <Title>Ошибка</Title>
+            <Message>Произошла ошибка. Пожалуйста, попробуйте позже. <CrossMark /></Message>
+          </StatusWrapper>
+        );
+    }
+  };
 
-    return (
-        <StyledBox>
-            <Typography variant="h4" component="h1" gutterBottom>
-                Статус оплаты
-            </Typography>
-            {renderStatusMessage()}
-        </StyledBox>
-    );
+  return (
+    <Container>
+        <ButtonWrap>
+      <BackButton />
+      </ButtonWrap>
+      {renderStatusMessage()}
+    </Container>
+  );
 };
 
-const StyledBox = styled(Box)`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 70vh;
-    text-align: center;
-    padding: 2rem;
-    font-family: "Fira Mono", monospace;
-    font-weight: 300;
-    & p {
-        margin-top: 20px;
-        font-size: 1.2rem;
-    }
+export default PaymentStatus;
+
+
+const ButtonWrap = styled.div`
+margin-bottom: 2vw;
+`                                           
+
+const TitleWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Центрируем по горизонтали */
 `;
 
-export default PaymentStatus;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 70vh;
+  text-align: center;
+  padding: 2rem;
+  font-family: 'Fira Mono', monospace;
+  font-weight: 300;
+`;
+
+const StatusWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+`;
+
+const MessageWrapper = styled.div`
+  font-size: calc(1vw + 10px);
+  font-family: 'Fira Mono', monospace;
+  color: #333;
+`;
+
+const Title = styled.h2`
+  font-family: 'NEXT ART', sans-serif;
+  font-size: calc(2vw + 10px);
+  font-weight: 700;
+`;
+
+const Message = styled.p`
+  font-size: calc(1vw + 10px);
+  font-family: 'Fira Mono', monospace;
+  font-weight: 300;
+  color: #555;
+`;
+
+const CheckMark = styled.div`
+  width: 12vw; /* Увеличиваем размер */
+  height: 12vw;
+  position: relative;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    background-color: #51C49B; /* Цвет галочки */
+    border-radius: 4px; /* Делаем линии более толстыми */
+  }
+
+  &::before {
+    width: 38%; /* Ширина левой части галочки */
+    height: 10%; /* Толщина */
+    transform: rotate(45deg);
+    top: 58%;
+    left: 12%; /* Сдвигаем левую часть левее */
+  }
+
+  &::after {
+    width: 60%; /* Ширина правой части галочки */
+    height: 10%; /* Толщина */
+    transform: rotate(-45deg);
+    top: 50%;
+    left: 30%;
+  }
+
+  @media (max-width: 768px) {
+    width: 24vw; /* Увеличиваем размер для мобильных устройств */
+    height: 24vw;
+
+    &::before,
+    &::after {
+      border-radius: 5px; /* Делаем толще */
+    }
+  }
+`;
+
+const CrossMark = styled.div`
+  width: 12vw; /* Увеличиваем размер */
+  height: 12vw;
+  position: relative;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    background-color: #f44336; /* Цвет крестика */
+    border-radius: 4px; /* Делаем линии более толстыми */
+  }
+
+  &::before {
+    width: 80%; /* Ширина линии */
+    height: 10%; /* Толщина */
+    transform: rotate(45deg);
+    top: 50%;
+    left: 10%;
+  }
+
+  &::after {
+    width: 80%; /* Ширина линии */
+    height: 10%; /* Толщина */
+    transform: rotate(-45deg);
+    top: 50%;
+    left: 10%;
+  }
+
+  @media (max-width: 768px) {
+    width: 24vw; /* Увеличиваем размер для мобильных устройств */
+    height: 24vw;
+
+    &::before,
+    &::after {
+      border-radius: 5px; /* Делаем толще */
+    }
+  }
+`;

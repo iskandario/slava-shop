@@ -1,3 +1,6 @@
-# https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Allow: /
+Disallow: /Basket
+Disallow: /basket
+
+Sitemap: https://vyacheslavna.ru/sitemap.xml

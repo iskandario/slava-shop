@@ -5,18 +5,19 @@ export type SizeChart = {
   };
   
   export type ProductType = {
-    id: string;           // Идентификатор продукта
-    title: string;        // Название продукта
-    compound: string;     // Состав продукта (материалы)
-    price: number;        // Цена продукта
-    imgUrl: string;       // URL изображения продукта
-    sizes: string[];      // Доступные размеры
-    size_s_quantity: number;  // Количество для размера S
-    size_m_quantity: number;  // Количество для размера M
-    size_c_quantity: number;  // Количество для размера C
-    size_chart: Record<string, Record<string, string>>; // Динамическая размерная сетка
-    sizeSelect?: string;   // Выбранный размер (опционально)
-};
+    id: string; // Уникальный идентификатор продукта
+    title: string; // Название продукта
+    compound: string; // Состав продукта
+    price: number; // Цена продукта
+    imgUrl: string; // URL изображения
+    modelUrl: string; // URL 3D модели
+    sizes: string[]; // Доступные размеры
+    size_s_quantity: number; // Количество для размера S
+    size_m_quantity: number; // Количество для размера M
+    size_c_quantity: number; // Количество для размера C
+    size_chart: Record<string, Record<string, string>>; // Размерная сетка
+    sizeSelect?: string; // Выбранный размер (опционально)
+  };
 
 const useProducts = (): [ProductType[], React.Dispatch<React.SetStateAction<ProductType[]>>] => {
 

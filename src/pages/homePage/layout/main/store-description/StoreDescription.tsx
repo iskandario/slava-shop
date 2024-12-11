@@ -7,7 +7,7 @@ import {
   PhotoDescription,
   SecondBigDiv,
   StyledMainDiv,
-  StyledMainGrid, ThreeTextDiv, TwoTextDiv
+  StyledMainGrid, ThreeTextDiv, TwoTextDiv, StyledButton
 } from "./_stylesDescription";
 
 type StoreDescriptionProps = {
@@ -34,11 +34,13 @@ export const StoreDescription = ({ scrollToCatalog }: StoreDescriptionProps) => 
         <SecondBigDiv>
           <ThreeTextDiv>
             <PhotoDescription>
-              <a onClick={handleCatalogClick}>К каталогу →</a>
               <picture>
-                <source media="(max-width: 1000px)" srcSet={SmallPhoto} />
-                <img src={LargePhoto} alt="Main Catalog" />
+                <source media="(max-width: 768px)" srcSet={SmallPhoto} />
+                <img src={LargePhoto} alt="Main Catalog" style={{ marginTop: '0px' }} />
               </picture>
+              <StyledButton onClick={handleCatalogClick}>
+                К каталогу →
+              </StyledButton>
             </PhotoDescription>
           </ThreeTextDiv>
           <FourTextDiv>

@@ -47,6 +47,7 @@ function App() {
 			<BasketProvider>
 				<StyledApp className="App">
 					<Navigation/>
+					<Content>
 					<Routes>
 						<Route path="/" element={<HomePage products={products}/>}/>
 						<Route path="/basket" element={<Basket/>}/>
@@ -56,6 +57,7 @@ function App() {
 						<Route path="/404" element={<PageNotFound/>}/>
 						<Route path="*" element={<Navigate to="/404"/>}/>
 					</Routes>
+					</Content>
 					<Footer/>
 				</StyledApp>
 			</BasketProvider>
@@ -92,8 +94,15 @@ export default App;
 const StyledApp = styled.div`
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 20px);
+  min-height: 100vh;
+  flex: 1 0 auto; /* Заставляет зайти оставшееся пространство */
+
 `;
+
+const Content = styled.div`
+flex: 1; 
+
+`
 
 const ErrorP = styled.p`
 	background-color: orange;
