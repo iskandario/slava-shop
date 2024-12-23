@@ -17,7 +17,7 @@ const PaymentStatus = () => {
   // Poll payment status
   const pollPaymentStatus = useCallback(async () => {
     try {
-      const response = await axios.get(`https://vyacheslavna.ru/check_payment_status.php?order_id=${orderId}`, {
+      const response = await axios.get(`https://vyacheslavnabrand.ru/check_payment_status.php?order_id=${orderId}`, {
         headers: {
           'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
           'Pragma': 'no-cache',
@@ -83,7 +83,8 @@ const PaymentStatus = () => {
         return (
           <StatusWrapper>
             <Title>Ошибка</Title>
-            <Message>Произошла ошибка. Пожалуйста, попробуйте позже. <CrossMark /></Message>
+            <CrossMark />
+            <Message>Произошла ошибка. Пожалуйста, попробуйте позже.</Message>
           </StatusWrapper>
         );
     }

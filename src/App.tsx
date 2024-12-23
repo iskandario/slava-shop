@@ -22,7 +22,7 @@ function App() {
 	useEffect(() => {
 		async function fetchProducts() {
 			try {
-				const response = await fetch('https://vyacheslavna.ru/products.php'); // URL для загрузки данных с сервера
+				const response = await fetch('https://vyacheslavnabrand.ru/products.php'); // URL для загрузки данных с сервера
 				if (!response.ok) {
 					throw new Error(`HTTP error! status: ${response.status}`);
 				}

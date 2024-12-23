@@ -15,13 +15,13 @@ export const Catalog = forwardRef<HTMLDivElement, CatalogProps>(({ products }, r
 
   // Список URL для изображений
   const imageUrls: { [key: string]: string } = {
-    pinkShirt: 'https://vyacheslavna.ru/SOURCE/images/catalog/pink_shirt1.jpg',
-    jacket: 'https://vyacheslavna.ru/SOURCE/images/catalog/jacket.jpg',
-    corset: 'https://vyacheslavna.ru/SOURCE/images/catalog/corset.jpg',
-    dress: 'https://vyacheslavna.ru/SOURCE/images/catalog/dress.jpg',
-    blueShirt: 'https://vyacheslavna.ru/SOURCE/images/catalog/blue_shirt_catalog.jpg',
-    batistSet: 'https://vyacheslavna.ru/SOURCE/images/catalog/batist_big.jpg',
-    skirt: 'https://vyacheslavna.ru/SOURCE/images/catalog/skirt.jpg',
+    pinkShirt: 'https://vyacheslavnabrand.ru/SOURCE/images/catalog/pink_shirt1.jpg',
+    jacket: 'https://vyacheslavnabrand.ru/SOURCE/images/catalog/jacket.jpg',
+    corset: 'https://vyacheslavnabrand.ru/SOURCE/images/catalog/corset.jpg',
+    dress: 'https://vyacheslavnabrand.ru/SOURCE/images/catalog/dress.jpg',
+    blueShirt: 'https://vyacheslavnabrand.ru/SOURCE/images/catalog/blue_shirt_catalog.jpg',
+    batistSet: 'https://vyacheslavnabrand.ru/SOURCE/images/catalog/batist_big.jpg',
+    skirt: 'https://vyacheslavnabrand.ru/SOURCE/images/catalog/skirt.jpg',
   };
 
   const handleCardClick = (id: string) => {

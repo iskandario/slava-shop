@@ -16,13 +16,13 @@ interface ProductGalleryProps {
 }
 
 const modelThumbnails: { [key: string]: string } = {
-  "1": "https://vyacheslavna.ru/SOURCE/images/small_images/pink_shirt.png",
-  "2": "https://vyacheslavna.ru/SOURCE/images/small_images/jacket.png",
-  "3": "https://vyacheslavna.ru/SOURCE/images/small_images/corset.png",
-  "4": "https://vyacheslavna.ru/SOURCE/images/small_images/batist.png",
-  "5": "https://vyacheslavna.ru/SOURCE/images/small_images/batist.png",
-  "6": "https://vyacheslavna.ru/SOURCE/images/small_images/blue_shirt.png",
-  "7": "https://vyacheslavna.ru/SOURCE/images/small_images/dress.png",
+  "1": "https://vyacheslavnabrand.ru/SOURCE/images/small_images/pink_shirt.png",
+  "2": "https://vyacheslavnabrand.ru/SOURCE/images/small_images/jacket.png",
+  "3": "https://vyacheslavnabrand.ru/SOURCE/images/small_images/corset.png",
+  "4": "https://vyacheslavnabrand.ru/SOURCE/images/small_images/batist.png",
+  "5": "https://vyacheslavnabrand.ru/SOURCE/images/small_images/batist.png",
+  "6": "https://vyacheslavnabrand.ru/SOURCE/images/small_images/blue_shirt.png",
+  "7": "https://vyacheslavnabrand.ru/SOURCE/images/small_images/dress.png",
 };
 
 

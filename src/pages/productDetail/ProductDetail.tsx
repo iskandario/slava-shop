@@ -21,30 +21,30 @@ import BackButton from "../../components/BackButton";
 
 const imageUrls: { [key: string]: string[] } = {
   "1": [
-    "https://vyacheslavna.ru/SOURCE/images/product_detail_photos/pink1.jpg",
-    "https://vyacheslavna.ru/SOURCE/images/product_detail_photos/pink2.jpg"
+    "https://vyacheslavnabrand.ru/SOURCE/images/product_detail_photos/pink1.jpg",
+    "https://vyacheslavnabrand.ru/SOURCE/images/product_detail_photos/pink2.jpg"
   ],
-  "2": ["https://vyacheslavna.ru/SOURCE/images/product_detail_photos/jacket.jpg"],
-  "3": ["https://vyacheslavna.ru/SOURCE/images/product_detail_photos/corset.jpg"],
-  "4": ["https://vyacheslavna.ru/SOURCE/images/product_detail_photos/shirt1.jpg",
-        "https://vyacheslavna.ru/SOURCE/images/product_detail_photos/shirt2.jpg"
+  "2": ["https://vyacheslavnabrand.ru/SOURCE/images/product_detail_photos/jacket.jpg"],
+  "3": ["https://vyacheslavnabrand.ru/SOURCE/images/product_detail_photos/corset.jpg"],
+  "4": ["https://vyacheslavnabrand.ru/SOURCE/images/product_detail_photos/shirt1.jpg",
+        "https://vyacheslavnabrand.ru/SOURCE/images/product_detail_photos/shirt2.jpg"
   ],
-  "5": ["https://vyacheslavna.ru/SOURCE/images/product_detail_photos/skirt1.jpg"],
+  "5": ["https://vyacheslavnabrand.ru/SOURCE/images/product_detail_photos/skirt1.jpg"],
   "6": [
-    "https://vyacheslavna.ru/SOURCE/images/product_detail_photos/blue_shirt1.jpg",
-    "https://vyacheslavna.ru/SOURCE/images/product_detail_photos/blue_shirt2.jpg"
+    "https://vyacheslavnabrand.ru/SOURCE/images/product_detail_photos/blue_shirt1.jpg",
+    "https://vyacheslavnabrand.ru/SOURCE/images/product_detail_photos/blue_shirt2.jpg"
   ],
-  "7": ["https://vyacheslavna.ru/SOURCE/images/product_detail_photos/dress.jpg"],
+  "7": ["https://vyacheslavnabrand.ru/SOURCE/images/product_detail_photos/dress.jpg"],
 };
 
 const modelPaths: { [key: string]: string } = {
-  "1": "https://vyacheslavna.ru/SOURCE/models/pink_shirt.glb",
-  "2": "https://vyacheslavna.ru/SOURCE/models/jacket_model3.glb",
-  "3": "https://vyacheslavna.ru/SOURCE/models/corset.glb",
-  "4": "https://vyacheslavna.ru/SOURCE/models/batist.glb",
-  "5": "https://vyacheslavna.ru/SOURCE/models/batist.glb",
-  "6": "https://vyacheslavna.ru/SOURCE/models/blue_shirt.glb",
-  "7": "https://vyacheslavna.ru/SOURCE/models/dress.glb",
+  "1": "https://vyacheslavnabrand.ru/SOURCE/models/pink_shirt.glb",
+  "2": "https://vyacheslavnabrand.ru/SOURCE/models/jacket_model3.glb",
+  "3": "https://vyacheslavnabrand.ru/SOURCE/models/corset.glb",
+  "4": "https://vyacheslavnabrand.ru/SOURCE/models/batist.glb",
+  "5": "https://vyacheslavnabrand.ru/SOURCE/models/batist.glb",
+  "6": "https://vyacheslavnabrand.ru/SOURCE/models/blue_shirt.glb",
+  "7": "https://vyacheslavnabrand.ru/SOURCE/models/dress.glb",
 };
 
 type ProductDetailProps = {
@@ -286,7 +286,7 @@ const ProductDetail = ({ products }: ProductDetailProps) => {
                 ) : product.sizes.filter((size) => getSizeQuantity(size) > 0).length === 1 ? (
                   product.sizes.map((size) =>
                     getSizeQuantity(size) > 0 ? (
-                      <NoSizesAvailable key={size}>{size}</NoSizesAvailable>
+                      <OneSizeAvailable key={size}>{size}</OneSizeAvailable>
                     ) : null
                   )
                 ) : areSizesAvailable() ? (
@@ -463,7 +463,7 @@ const StyledBackButton = styled.div`
 
 
 const NoSizesAvailable = styled.div`
-  font-size: calc(0.6vw + 5px);
+  font-size: calc(0.3vw + 8px);
   color: rgb(24 16 16 / 74%);
   font-weight: normal;
   text-align: center;
@@ -471,9 +471,24 @@ const NoSizesAvailable = styled.div`
   opacity: 0.5;
 
   @media (max-width: 768px) {
-    font-size: 2vw;
+    margin-top: -1vw;
+    font-size: calc(1vw + 10px);
   }
 `;
+
+const OneSizeAvailable = styled.div`
+font-size: calc(0.7vw + 8px);
+  color: rgb(24 16 16 / 74%);
+  font-weight: normal;
+  text-align: center;
+  cursor: not-allowed;
+  opacity: 0.5;
+
+  @media (max-width: 768px) {
+    margin-top: -1vw;
+    font-size: calc(1.2vw + 10px);
+  }
+`
 
 const TitleAndPrice = styled.div`
   display: flex;

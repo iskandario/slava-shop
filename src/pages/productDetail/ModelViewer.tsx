@@ -45,7 +45,7 @@ const modelConfigurations: Record<
   '5': {
     scale: 0.5,
     position: [0, -0.5, 0],
-    lights: { ambient: 0.1, directional: { intensity: 0.2, position: [1, 7, 4] } },
+    lights: { ambient: 0.1 , directional: { intensity: 0.2, position: [1, 7, 4] } },
   },
   '6': {
     scale: 3,

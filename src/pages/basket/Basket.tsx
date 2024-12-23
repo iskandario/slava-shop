@@ -9,13 +9,13 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 
 const imageUrls: { [key: string]: string } = {
-  "1": "https://vyacheslavna.ru/SOURCE/images/catalog/pink_shirt1.jpg",
-  "2": "https://vyacheslavna.ru/SOURCE/images/catalog/jacket.jpg",
-  "3": "https://vyacheslavna.ru/SOURCE/images/catalog/corset.jpg",
-  "4": "https://vyacheslavna.ru/SOURCE/images/catalog/shirt2.jpg",
-  "5": "https://vyacheslavna.ru/SOURCE/images/catalog/skirt1.jpg",
-  "6": "https://vyacheslavna.ru/SOURCE/images/catalog/blue_shirt_catalog.jpg",
-  "7": "https://vyacheslavna.ru/SOURCE/images/catalog/dress.jpg",
+  "1": "https://vyacheslavnabrand.ru/SOURCE/images/catalog/pink_shirt1.jpg",
+  "2": "https://vyacheslavnabrand.ru/SOURCE/images/catalog/jacket.jpg",
+  "3": "https://vyacheslavnabrand.ru/SOURCE/images/catalog/corset.jpg",
+  "4": "https://vyacheslavnabrand.ru/SOURCE/images/catalog/shirt2.jpg",
+  "5": "https://vyacheslavnabrand.ru/SOURCE/images/catalog/skirt1.jpg",
+  "6": "https://vyacheslavnabrand.ru/SOURCE/images/catalog/blue_shirt_catalog.jpg",
+  "7": "https://vyacheslavnabrand.ru/SOURCE/images/catalog/dress.jpg",
 };
 
 type AvailabilityMap = {
@@ -45,7 +45,7 @@ export const Basket = () => {
 
   const fetchProductAvailability = async () => {
     try {
-      const response = await fetch("https://vyacheslavna.ru/products.php");
+      const response = await fetch("https://vyacheslavnabrand.ru/products.php");
       if (!response.ok) throw new Error("Ошибка загрузки данных");
       const products = await response.json();
 

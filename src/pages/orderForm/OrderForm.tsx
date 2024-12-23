@@ -44,7 +44,7 @@ const OrderForm: React.FC<OrderFormProps> = () => {
       console.log('Отправляемые данные заказа:', orderData);
   
       try {
-          const response = await fetch('https://vyacheslavna.ru/process_payment.php', {
+          const response = await fetch('https://vyacheslavnabrand.ru/process_payment.php', {
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json',
