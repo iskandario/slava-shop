@@ -1,7 +1,7 @@
 # My App
 
 ## Описание
-
+test
 Проект создан с использованием React, Typescript и Styled-components. В проекте также задействованы библиотеки для тестирования, такие как Testing Library и Jest.
 
 ## Скрипты
