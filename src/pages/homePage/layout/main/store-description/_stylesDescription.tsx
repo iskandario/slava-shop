@@ -80,6 +80,16 @@ export const StyledMainGrid = styled.div`
     width: 208px;
   }
 
+  p > span {
+    text-wrap: nowrap;
+  }
+  
+  //todo: Удалить после позиционирования
+  div > div {
+    outline: 1px solid red;
+  }
+
+
   div {
     a {
       color: ${theme.mainTextColor};
@@ -194,11 +204,13 @@ export const OneTextDiv = styled.div`
   align-self: flex-start;
   font-size: calc(9px + 0.5vw); /* Шрифт будет увеличиваться с размером экрана */
   margin-right: 10px;
+  
+
 
   @media (max-width: 1100px) {
-  margin-left: 10vw;
+    margin-left: 10vw;
 
- }
+  }
 
   @media (max-width: 768px) {
     margin-bottom: 20px;
