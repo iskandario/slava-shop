@@ -43,7 +43,7 @@ export const Footer = (props: Props) => {
 const StyledLink = styled.a`
   text-decoration: none; 
   color: inherit; 
-  border-bottom: 0.9px solid ${theme.secondaryTextColor}; 
+  cursor: pointer;
 `;
 
 const RightAligned = styled.div`

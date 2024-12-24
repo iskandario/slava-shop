@@ -49,6 +49,7 @@ export const Catalog = forwardRef<HTMLDivElement, CatalogProps>(({ products }, r
 
         <GroupedCardContainer>
           <Image src={imageUrls.batistSet} alt="Batist Set" />
+
           <BatistTitle>Batist Set</BatistTitle>
           <GroupedButtons>
             <Title onClick={() => handleCardClick('4')}>Рубашка →</Title>
@@ -169,6 +170,7 @@ const DoubleCard = styled.div`
 `;
 
 const GroupedButtons = styled.div`
+  width: 100%;
   display: flex;
   gap: 3vw;
 `;
@@ -234,25 +236,25 @@ export const Title = styled.h3`
 `;
 
 export const BatistTitle = styled.h3`
- white-space: nowrap;
+  white-space: nowrap;
   font-family: "Fira Mono", monospace;
   font-size: calc(1.2vw + 5px);
   font-weight: 400;
+  text-align: left;
   margin-top: 1rem;
-  text-align: center;
   color: black;
-  width: fit-content;
-  
+  width: 100%;
+
   &:hover {
     cursor: pointer;
   }
 
-   @media (max-width: 768px) {
-  font-size: 2.5vw;
+  @media (max-width: 768px) {
+    font-size: 2.5vw;
   }
 
-   @media (max-width: 560px) {
-   font-size: 3.5vw;
+  @media (max-width: 560px) {
+    font-size: 3.5vw;
   }
 
 
