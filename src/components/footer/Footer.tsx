@@ -14,6 +14,11 @@ export const Footer = (props: Props) => {
   return (
     <StyledFooter>
       <div>
+
+      <LanguageSwitcher>
+          <span>Ru / &nbsp;&nbsp;&nbsp; Rub</span>
+        </LanguageSwitcher>
+
         <SocialMedia>
           <a href="https://www.instagram.com/vyacheslavna.brand?igsh=MTN3aHE4NjBoM3R6aQ==" target="_blank" rel="noopener noreferrer">
             <span>{media.inst.toUpperCase()} </span>
@@ -46,8 +51,25 @@ const StyledLink = styled.a`
   cursor: pointer;
 `;
 
+const LanguageSwitcher = styled.div`
+  font-family: 'Fira Mono', monospace;
+  font-size: calc(0.6vw + 5px);
+  font-weight: 100;
+  color: #333;
+  display: block;
+
+  /* Скрыть на мобильных */
+  @media (max-width: 768px) {
+    display: none;
+  }
+
+  span {
+    cursor: default;
+  }
+`;
+
 const RightAligned = styled.div`
-  font-size: calc(0.7vw + 10px);
+  font-size: calc(0.6vw + 5px);
   display: flex;
   flex-direction: row;
   align-items: flex-end;
@@ -82,7 +104,7 @@ const StyledFooter = styled.footer`
   line-height: 1.5;
   padding-top: 2vw;
   padding-bottom: 38px;
-  font-size: calc(0.8vw + 5px);
+  font-size: calc(0.5vw + 5px);
   margin-top: auto;
 
   min-height: 153px;
@@ -105,7 +127,7 @@ const StyledFooter = styled.footer`
 
 const SocialMedia = styled.div`
   display: flex;
-  font-size: calc(0.5vw + 10px);
+  font-size: calc(0.5vw + 5px);
   flex-direction: row;
   align-items: flex-end;
   justify-content: center;
