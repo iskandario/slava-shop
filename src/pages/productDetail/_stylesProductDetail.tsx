@@ -34,7 +34,7 @@ export const StyledImageGalleryWrapper = styled.div`
 export const Title = styled.h2`
   margin-top: 4vw;
   margin-bottom: 10px;
-  font-weight: semi-bold;
+  font-weight: 600;
   font-size: calc(1.2vw + 5px);   
       @media (max-width: 768px) {
         margin-top: 2vw;
@@ -45,7 +45,7 @@ export const Title = styled.h2`
 
 export const Price = styled.p`
   font-size: calc(1vw + 5px);
-  font-weight: bold;
+  font-weight: 600;
     margin: 0; 
 
    @media (max-width: 768px) {
@@ -58,10 +58,10 @@ export const Price = styled.p`
 export const Compound = styled.p`
   margin-top: -15px; 
   margin-bottom: 30px;
-  font-size: calc(0.8vw + 5px);   
-  color: #a7a3a3;   
+  font-size: calc(0.5vw + 5px);   
+  color: #C4C4C4;;   
         @media (max-width: 768px) {
-        font-size: 3vw;
+        font-size: 2vw;
 }
      
 `;
@@ -85,8 +85,8 @@ export const StyledButton = styled(Button)`
       content: ''; /* Обязательно для псевдоэлемента */
       position: absolute;
 
-      bottom: 3px; /* Располагаем под текстом */
-      width: 85%; /* Длина подчеркивания */
+      bottom: -2px; /* Располагаем под текстом */
+      width: 95%; /* Длина подчеркивания */
       height: 1px; /* Толщина линии */
       background-color: #C0C0C0; 
     }

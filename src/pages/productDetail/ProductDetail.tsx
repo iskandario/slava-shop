@@ -199,7 +199,6 @@ const ProductDetail = ({ products }: ProductDetailProps) => {
         return (
           <>
             Длина
-            <br />
             рукава
           </>
         );
@@ -207,7 +206,6 @@ const ProductDetail = ({ products }: ProductDetailProps) => {
         return (
           <>
             Обхват
-            <br />
             груди
           </>
         );;
@@ -215,7 +213,6 @@ const ProductDetail = ({ products }: ProductDetailProps) => {
         return (
           <>
             Обхват
-            <br />
             талии
           </>
         );
@@ -223,7 +220,6 @@ const ProductDetail = ({ products }: ProductDetailProps) => {
         return (
           <>
             Длина
-            <br />
             верха
           </>
         );
@@ -231,7 +227,6 @@ const ProductDetail = ({ products }: ProductDetailProps) => {
         return (
           <>
             Длина
-            <br />
             юбки
           </>
         );
@@ -267,8 +262,7 @@ const ProductDetail = ({ products }: ProductDetailProps) => {
               </TitleCompoundWrapper>
 
               <PriceSize>
-              <Price>{product.price}₽
-              </Price>
+              <Price>{Number(product.price).toLocaleString('ru-RU')}₽</Price>
 
 
               <PositioningWrapper>
@@ -319,25 +313,29 @@ const ProductDetail = ({ products }: ProductDetailProps) => {
             </MobileLayout>
 
             {product.size_chart ? (
-              <SizeChartWrapper>
-                <SizeRow>
-                  <SizeHeaderText>Размерная сетка</SizeHeaderText>
+            <SizeChartWrapper as="table">
+              <thead>
+                <tr>
+                  <th>Размерная сетка</th>
                   {getHeaderNames(product.size_chart).map((key) => (
-                    <SizeHeaderText key={key}>{getLabelText(key)}</SizeHeaderText>
+                    <th key={key}>{getLabelText(key)}</th>
                   ))}
-                </SizeRow>
+                </tr>
+              </thead>
+              <tbody>
                 {Object.entries(sortSizeChart(product.size_chart)).map(([size, details]) => (
-                  <SizeRow key={size}>
-                    <SizeHeader>{size}</SizeHeader>
+                  <tr key={size}>
+                    <td>{size}</td>
                     {Object.entries(details).map(([key, value]) => (
-                      <SizeInfo key={key}>{value}</SizeInfo>
+                      <td key={key}>{value}</td>
                     ))}
-                  </SizeRow>
+                  </tr>
                 ))}
-              </SizeChartWrapper>
-            ) : (
-              <div>Размерная сетка недоступна</div>
-            )}
+              </tbody>
+            </SizeChartWrapper>
+          ) : (
+            <div>Размерная сетка недоступна</div>
+          )}
 
             {areSizesAvailable() && (
               <StyledAddToBasketButton onClick={handleAddToBasket}>
@@ -464,11 +462,10 @@ const StyledBackButton = styled.div`
 
 const NoSizesAvailable = styled.div`
   font-size: calc(0.3vw + 8px);
-  color: rgb(24 16 16 / 74%);
+  color: #C4C4C4;;
   font-weight: normal;
   text-align: center;
   cursor: not-allowed;
-  opacity: 0.5;
 
   @media (max-width: 768px) {
     margin-top: -1vw;
@@ -477,12 +474,11 @@ const NoSizesAvailable = styled.div`
 `;
 
 const OneSizeAvailable = styled.div`
-font-size: calc(0.7vw + 8px);
-  color: rgb(24 16 16 / 74%);
+  font-size: calc(0.7vw + 8px);
+  color: #C4C4C4;
   font-weight: normal;
   text-align: center;
   cursor: not-allowed;
-  opacity: 0.5;
 
   @media (max-width: 768px) {
     margin-top: -1vw;
@@ -622,6 +618,7 @@ const StyledAddToBasketButton = styled(StyledButton)`
   && {
     font-size: calc(0.8vw + 5px);
     padding-top: 50px;
+    padding-bottom: 0px;
     font-family: "FiraMono", monospace;
     color: black;
 
@@ -631,59 +628,56 @@ const StyledAddToBasketButton = styled(StyledButton)`
   }
 `;
 
-const SizeChartWrapper = styled.div`
+
+
+const SizeChartWrapper = styled.table`
   margin-top: 10px;
-
-    @media (min-width:768px) {
-    max-width: 80%;
-   }
-`;
-
-const SizeRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 4px 0;
-  flex-wrap: wrap; /* Разрешаем перенос строк */
-  gap: 1vw; /* Отступы между столбцами */
-`;
-
-
-const SizeHeader = styled.div`
-  flex: 1; 
-  text-align: center;
-  font-size: calc(0.4vw + 5px);
-  word-wrap: break-word; 
-  white-space: normal; 
-
-   @media (max-width:768px) {
-  font-size: 2.7vw;
-  }
-`;
-
-const SizeInfo = styled.div`
-  flex: 1; 
-  text-align: center;
-  font-size: calc(0.4vw + 5px);
-  word-wrap: break-word; 
-  white-space: normal; 
+  width: 90%;
+  border-collapse: collapse;
 
   @media (max-width:768px) {
-  font-size: 2.7vw;
+    width: 100%;
   }
-`;
 
-const SizeHeaderText = styled.div`
-  flex: 1;
-  text-align: center;
-  color: #a7a3a3;
-  font-size: calc(0.4vw + 5px);
-  word-wrap: break-word; 
-  white-space: normal; 
-  
 
-  @media (max-width:768px) {
-  font-size: 2.7vw;
+  th, td {
+    padding: 8px; /* Отступы для удобства чтения */
+    text-align: left;
+  }
+
+  th {
+    font-size: calc(0.4vw + 5px);
+    white-space: nowrap;
+    color: #C4C4C4; /* Можно оставить цвет для заголовков */
+    font-weight: normal;
+
+    @media (max-width:1100px) {
+      font-size: calc(0.3vw + 5px);
+    }
+     @media (max-width:768px) {
+      font-size: calc(0.8vw + 5px);
+    }
+  }
+
+  td {
+    font-size: calc(0.4vw + 5px);
+    color: #333; /* Текстовые данные */
+    @media (max-width:1100px) {
+      font-size: calc(0.3vw + 5px);
+    }
+    @media (max-width:768px) {
+      font-size: calc(0.8vw + 5px);
+    }
+  }
+
+  /* Убираем линии */
+  th, td {
+    border: none; /* Без рамок */
+  }
+
+  /* Убираем фон */
+  th {
+    background-color: transparent;
   }
 `;
 

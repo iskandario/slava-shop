@@ -948,8 +948,8 @@ const StyledButton = styled(Button)`
       content: ''; /* Обязательно для псевдоэлемента */
       position: absolute;
 
-     bottom: 10px; /* Располагаем под текстом */
-      width: 85%; 
+      bottom: 10px; /* Располагаем под текстом */
+      width: 95%; 
       height: 1px; /* Толщина линии */
       background-color: #C0C0C0; 
     }

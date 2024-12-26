@@ -300,7 +300,7 @@ white-space: nowrap;
   color: black;
   margin-top: 1vw; 
   margin-left:1vw;
-  border-bottom: 1px solid gray;
+  border-bottom: 0.9px solid ${theme.secondaryTextColor};
   transition: transform 0.2s ease;
 
 

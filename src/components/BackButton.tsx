@@ -37,7 +37,7 @@ const StyledButton = styled.button`
   font-weight: 500;
   background: none;
   line-height: 1.8;
-  border-bottom: 0.9px solid #666; /* Серое подчеркивание */
+  border-bottom: 0.9px solid ${theme.secondaryTextColor};
   font-size: calc(1vw + 10px);
   cursor: pointer;
 

@@ -218,7 +218,7 @@ export const Title = styled.h3`
   text-align: center;
   color: black;
   width: fit-content;
-  border-bottom: 1px solid gray;
+  border-bottom: 0.9px solid ${theme.secondaryTextColor};
   
   &:hover {
     cursor: pointer;
