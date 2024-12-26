@@ -25,11 +25,6 @@ export const StoreDescription = ({scrollToCatalog}: StoreDescriptionProps) => {
       <StyledMainGrid>
         <FirstBigDiv>
           <OneTextDiv>
-            {/*&nbsp; = ширина одной буквы*/}
-            {/*Настроить первую строку и по ней ровнять остальные, для этого лучше не использовать проблеы*/}
-            {/*Так как используеться &nbsp;*/}
-
-            {/*то что текст выходит за границы, ничего страшного */}
             <p><span>VYACHESLÁVNA&nbsp;&nbsp;&nbsp;начинает</span><br/>
               <span>свое&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;путешествие,</span><br/>
               <span>вкладывая&nbsp;&nbsp;&nbsp;&nbsp;в&nbsp;&nbsp;&nbsp;&nbsp;каждый</span><br/>
@@ -38,7 +33,11 @@ export const StoreDescription = ({scrollToCatalog}: StoreDescriptionProps) => {
               творчества</p>
           </OneTextDiv>
           <TwoTextDiv>
-            <p>как распускающийся бутон редкого цветка, медленно и уверенно раскрывающий свое великолепие</p>
+            <p><span>как&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;распускающийся</span><br/>
+              <span>бутон&nbsp;&nbsp;&nbsp;редкого&nbsp;&nbsp;&nbsp;цветка,</span><br/>
+              <span>медленно&nbsp;&nbsp;&nbsp;&nbsp;и&nbsp;&nbsp;&nbsp;&nbsp;уверенно</span><br/>
+              <span>раскрывающий&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;свое</span><br/>
+              великолепие</p>
           </TwoTextDiv>
         </FirstBigDiv>
 
@@ -55,8 +54,14 @@ export const StoreDescription = ({scrollToCatalog}: StoreDescriptionProps) => {
             </PhotoDescription>
           </ThreeTextDiv>
           <FourTextDiv>
-            <p>Каждое изделие — воплощение женственности, капля изысканности, которую можно почувствовать, дотронувшись
-              до ткани</p>
+            <p>
+             <span>Каждое&nbsp;&nbsp;&nbsp;изделие&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;—</span><br/>
+              воплощение<br/>
+              <span>женственности,&nbsp;&nbsp;&nbsp;&nbsp;капля</span><br/>
+              <span>изысканности,&nbsp;которую</span><br/>
+               <span>можно&nbsp;&nbsp;&nbsp;почувствовать,</span><br/>
+              <span>дотронувшись&nbsp;до&nbsp;ткани</span>
+            </p>
           </FourTextDiv>
         </SecondBigDiv>
       </StyledMainGrid>
