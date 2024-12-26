@@ -78,15 +78,15 @@ export const StyledMainGrid = styled.div`
 
   p {
     width: 208px;
+    letter-spacing: calc(15px * 0.15);
   }
 
   p > span {
     text-wrap: nowrap;
   }
-  
-  //todo: Удалить после позиционирования
+
   div > div {
-    outline: 1px solid red;
+    
   }
 
 
