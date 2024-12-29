@@ -271,6 +271,7 @@ export const FourTextDiv = styled.div`
 
     @media (max-width: 768px) {
     & {
+      margin-right: 12vw;
       width: 50% !important; /* Увеличиваем ширину на мобильных */
       text-align: center !important; /* Центрируем текст */
       margin-top: 20px !important; /* Уменьшаем отступ сверху */
