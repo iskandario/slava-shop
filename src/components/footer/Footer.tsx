@@ -31,7 +31,7 @@ export const Footer = (props: Props) => {
         <RightAligned>
           <small className="made-by">
             Made by <StyledLink href="https://t.me/cvcvrs" target="_blank" rel="noopener noreferrer">
-              j.erotique 
+            cvcvrs 
             </StyledLink> 
 			<span> & </span>  
             <StyledLink href="https://www.instagram.com/iskandar0_o?igsh=MWpybXJleWg3cW9teQ%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer">

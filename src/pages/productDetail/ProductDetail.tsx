@@ -623,7 +623,7 @@ const StyledAddToBasketButton = styled(StyledButton)`
     color: black;
 
      @media (max-width: 768px) {
-     font-size: calc(1.2vw + 10px);
+     font-size: calc(1.2vw + 8px);
      }
   }
 `;
@@ -638,6 +638,7 @@ const SizeChartWrapper = styled.table`
   @media (max-width:768px) {
     width: 100%;
   }
+
 
 
   th, td {
@@ -657,6 +658,10 @@ const SizeChartWrapper = styled.table`
      @media (max-width:768px) {
       font-size: calc(0.8vw + 5px);
     }
+
+    @media (max-width:468px) {
+      font-size: calc(0.6vw + 5px);
+    }
   }
 
   td {
@@ -667,6 +672,10 @@ const SizeChartWrapper = styled.table`
     }
     @media (max-width:768px) {
       font-size: calc(0.8vw + 5px);
+    }
+
+    @media (max-width:468px) {
+      font-size: calc(0.6vw + 5px);
     }
   }
 

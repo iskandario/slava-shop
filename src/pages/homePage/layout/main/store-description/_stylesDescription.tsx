@@ -222,6 +222,7 @@ export const TwoTextDiv = styled.div`
   align-self: flex-end;
   margin-left: 35px;
   margin-bottom: 50px;
+  margin-right: 20px;
   font-size: calc(9px + 0.5vw);
 
   @media (max-width: 768px) {
@@ -233,6 +234,7 @@ export const TwoTextDiv = styled.div`
     }
     @media (min-width: 1500px) {
     margin-left: calc(10px + 10vw);
+    margin-right: calc(10px + 2vw);
 }
 `;
 
@@ -271,8 +273,8 @@ export const FourTextDiv = styled.div`
 
     @media (max-width: 768px) {
     & {
-      margin-right: 12vw;
-      width: 50% !important; /* Увеличиваем ширину на мобильных */
+      margin-right: 23vw;
+      width: 20% !important; /* Увеличиваем ширину на мобильных */
       text-align: center !important; /* Центрируем текст */
       margin-top: 20px !important; /* Уменьшаем отступ сверху */
     }
