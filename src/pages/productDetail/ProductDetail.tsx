@@ -35,6 +35,11 @@ const imageUrls: { [key: string]: string[] } = {
     "https://vyacheslavnabrand.ru/SOURCE/images/product_detail_photos/blue_shirt2.jpg"
   ],
   "7": ["https://vyacheslavnabrand.ru/SOURCE/images/product_detail_photos/dress.jpg"],
+  "8": ["https://vyacheslavnabrand.ru/SOURCE/images/product_detail_photos/valentine_him1.jpg",
+  "https://vyacheslavnabrand.ru/SOURCE/images/product_detail_photos/valentine_him2.jpg",
+  "https://vyacheslavnabrand.ru/SOURCE/images/product_detail_photos/valentine_him3.jpg"],
+  "9": ["https://vyacheslavnabrand.ru/SOURCE/images/product_detail_photos/valentine_her1.jpg",
+  "https://vyacheslavnabrand.ru/SOURCE/images/product_detail_photos/valentine_her2.jpg"],
 };
 
 const modelPaths: { [key: string]: string } = {
@@ -257,7 +262,18 @@ const ProductDetail = ({ products }: ProductDetailProps) => {
           >
             <MobileLayout>
               <TitleCompoundWrapper>
-                <Title>{product.title}</Title>
+              <Title>
+  {product.title.includes('for') ? (
+    <>
+      {product.title.split(' for ')[0]}
+      <ValentineLabelBlock>
+        FOR {product.title.split('for ')[1]?.toUpperCase()}
+      </ValentineLabelBlock>
+    </>
+  ) : (
+    product.title
+  )}
+</Title>
                 <Compound>{product.compound}</Compound>
               </TitleCompoundWrapper>
 
@@ -394,6 +410,14 @@ const SizeErrorMessage = styled.div`
     font-size: calc(0.8vw + 8px); /* Увеличиваем размер шрифта для мобильных */
   }
 `;
+const ValentineLabelBlock = styled.div`
+  color: rgb(174, 12, 12);
+  font-weight: 600;
+  font-size: 1em;
+  margin-top: 0.4em;
+  text-align: left;
+`;
+
 
 const SizeSelectorWrapper = styled.div`
   position: relative; 

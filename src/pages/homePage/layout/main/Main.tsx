@@ -24,7 +24,7 @@ export const Main = ({ scrollToCatalog }: MainProps) => {
 
 const PhotoWrapper = styled.div`
   position: relative;
-  margin-top: 60px;
+  margin-top: 5vw;
   width: 100%;
   padding-top: 37.55%; 
   overflow: hidden;
@@ -42,6 +42,10 @@ const StyledImg = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover; /* Картинка заполнит контейнер, сохраняя пропорции */
+  
+  @media (max-width: 1000px) {
+    margin-top: 4vw;
+  }
 
   @media (max-width: 768px) {
     object-fit: contain; /* На мобильных устройствах изображение будет целиком помещаться в контейнер */

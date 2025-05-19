@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, FreeMode } from 'swiper/modules';
 import styled from 'styled-components';
+// @ts-ignore
 import ModelViewer from './ModelViewer';
 import type { Swiper as SwiperInstance } from 'swiper';
 

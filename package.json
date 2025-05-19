@@ -8,14 +8,10 @@
     "@mui/icons-material": "^5.16.7",
     "@mui/material": "^5.16.1",
     "@react-three/drei": "^9.115.0",
-    "@react-three/fiber": "^8.17.10",
-    "@testing-library/jest-dom": "^5.14.1",
+    "@react-three/fiber": "^8.13.6",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
-    "@types/jest": "^27.0.1",
     "@types/node": "^16.7.13",
-    "@types/react": "^18.0.0",
-    "@types/react-dom": "^18.0.0",
     "@types/uuid": "^10.0.0",
     "axios": "^1.7.3",
     "firebase": "^10.12.3",
@@ -58,7 +54,12 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
+    "@types/jest": "^29.5.14",
+    "@types/react": "^19.1.4",
+    "@types/react-dom": "^19.1.5",
     "@types/react-image-gallery": "^1.2.4",
-    "@types/swiper": "^6.0.0"
+    "@types/swiper": "^6.0.0",
+    "@types/three": "^0.176.0"
   }
 }

@@ -1,13 +1,16 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "lib": ["dom", "es2015", "es2017"],
-    "jsx": "react",
+    "target": "ES6",
+    "lib": ["DOM", "ES2017"],
+    "jsx": "react-jsx",
+    "module": "ESNext",
+    "types": ["@react-three/fiber", "react", "jest", "react-dom"],
     "moduleResolution": "node",
     "esModuleInterop": true,
+    "typeRoots": ["./node_modules/@types", "./src/types"],
     "skipLibCheck": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "strict": true
   },
-  "include": ["src", "server.js"]
+  "include": ["src"]
 }

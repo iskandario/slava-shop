@@ -1,27 +1,10 @@
-import React, { Suspense, FC, useRef, useEffect, useState } from 'react';
+import React, { Suspense, useRef, useEffect, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, useGLTF, Html, Environment } from '@react-three/drei';
 
-interface ModelViewerProps {
-  modelPath: string;
-  productId: string;
-  imageAspectRatio: number; // Соотношение сторон изображения (ширина/высота)
-}
-
-// Глобальная скорость вращения
 const GLOBAL_ROTATION_SPEED = 0.01;
 
-const modelConfigurations: Record<
-  string,
-  {
-    scale: number;
-    position: [number, number, number];
-    lights: {
-      ambient: number;
-      directional: { intensity: number; position: [number, number, number] };
-    };
-  }
-> = {
+const modelConfigurations = {
   '1': {
     scale: 3,
     position: [0, 0.6, 0],
@@ -59,18 +42,13 @@ const modelConfigurations: Record<
   },
 };
 
-const Model: FC<{ modelPath: string; autoRotate: boolean; scale: number; position: [number, number, number] }> = ({
-  modelPath,
-  autoRotate,
-  scale,
-  position,
-}) => {
+const Model = ({ modelPath, autoRotate, scale, position }) => {
   const { scene } = useGLTF(modelPath);
-  const modelRef = useRef<any>(scene);
+  const modelRef = useRef();
 
   useFrame(() => {
     if (autoRotate && modelRef.current) {
-      modelRef.current.rotation.y += GLOBAL_ROTATION_SPEED; // Используем общую скорость
+      modelRef.current.rotation.y += GLOBAL_ROTATION_SPEED;
     }
   });
 
@@ -81,11 +59,10 @@ const Model: FC<{ modelPath: string; autoRotate: boolean; scale: number; positio
   );
 };
 
-const ModelViewer: FC<ModelViewerProps> = ({ modelPath, productId, imageAspectRatio }) => {
+const ModelViewer = ({ modelPath, productId, imageAspectRatio }) => {
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0, topPadding: 0 });
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  const containerRef = useRef(null);
 
-  // Достаём конфигурацию для текущей модели
   const { scale, position, lights } = modelConfigurations[productId] || {
     scale: 1,
     position: [0, 0, 0],
@@ -96,17 +73,14 @@ const ModelViewer: FC<ModelViewerProps> = ({ modelPath, productId, imageAspectRa
     const updateSize = () => {
       if (containerRef.current) {
         const width = containerRef.current.offsetWidth;
-        const height = (width * 500) / 359; // Высота на основе нового соотношения сторон
+        const height = (width * 500) / 359;
         setContainerSize({ width, height, topPadding: 0 });
       }
     };
 
     updateSize();
     window.addEventListener('resize', updateSize);
-
-    return () => {
-      window.removeEventListener('resize', updateSize);
-    };
+    return () => window.removeEventListener('resize', updateSize);
   }, []);
 
   return (
@@ -130,10 +104,10 @@ const ModelViewer: FC<ModelViewerProps> = ({ modelPath, productId, imageAspectRa
           castShadow
         />
         <Environment
-          files="/hdr/venice_sunset_1k.hdr" // Явный путь к файлу HDR
+          files="/hdr/venice_sunset_1k.hdr"
           background={false}
-        />  
-      <Suspense fallback={<LoadingScreen />}>
+        />
+        <Suspense fallback={<LoadingScreen />}>
           <Model
             modelPath={modelPath}
             autoRotate={true}
