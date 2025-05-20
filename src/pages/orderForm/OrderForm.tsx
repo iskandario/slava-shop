@@ -100,7 +100,7 @@ const OrderForm: React.FC<OrderFormProps> = () => {
                     {errors.city && <span>Это поле обязательно</span>}
                 </StyledFieldGrid>
                 <StyledFieldGrid item xl={4} md={4} xs={12}>
-                    <input placeholder={'Адрес'} {...register("address", { required: true })} />
+                    <input placeholder={'Адрес СДЭК'} {...register("address", { required: true })} />
                     {errors.address && <span>Это поле обязательно</span>}
                 </StyledFieldGrid>
                 <StyledFieldGrid item xl={4} md={4} xs={12}>

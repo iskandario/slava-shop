@@ -16,6 +16,8 @@ const imageUrls: { [key: string]: string } = {
   "5": "https://vyacheslavnabrand.ru/SOURCE/images/catalog/skirt1.jpg",
   "6": "https://vyacheslavnabrand.ru/SOURCE/images/catalog/blue_shirt_catalog.jpg",
   "7": "https://vyacheslavnabrand.ru/SOURCE/images/catalog/dress.jpg",
+  "8": 'https://vyacheslavnabrand.ru/SOURCE/images/catalog/valentine_him.jpg',
+  "9": 'https://vyacheslavnabrand.ru/SOURCE/images/catalog/valentine_her.jpg',
 };
 
 type AvailabilityMap = {
@@ -23,8 +25,10 @@ type AvailabilityMap = {
     size_s_quantity: number;
     size_m_quantity: number;
     size_c_quantity: number;
+    size_l_quantity: number; // ✅ ДОБАВЬ ЭТО
   };
 };
+
 
 type BasketProduct = {
   id: string;
@@ -50,15 +54,20 @@ export const Basket = () => {
       const products = await response.json();
 
       const availabilityMap: AvailabilityMap = products.reduce((acc: AvailabilityMap, product: any) => {
-        acc[product.id] = {
+        acc[String(product.id)] = {
           size_s_quantity: product.size_s_quantity,
           size_m_quantity: product.size_m_quantity,
           size_c_quantity: product.size_c_quantity,
+          size_l_quantity: product.size_l_quantity, // ✅ ДОБАВЬ ЭТО
         };
+        
         return acc;
       }, {});
+      
 
       setAvailability(availabilityMap);
+      console.log("Availability map:", availabilityMap["8"], availabilityMap["9"]);
+
     } catch (error) {
       console.error("Ошибка при запросе доступности:", error);
     }
@@ -84,6 +93,10 @@ export const Basket = () => {
       } else if (product.sizeSelect === "Единый размер") {
         availableQuantity = productAvailability.size_c_quantity;
       }
+      if (product.sizeSelect === "L") {
+        availableQuantity = productAvailability.size_l_quantity;
+      }
+      
 
       if (product.quantity > availableQuantity) {
         allAvailable = false;
@@ -105,16 +118,19 @@ export const Basket = () => {
       });
     }
   };
+
   const isSizeAvailable = (productId: string, size: string) => {
     const productAvailability = availability[productId];
     if (!productAvailability) return false;
-
+  
     if (size === "S") return productAvailability.size_s_quantity > 0;
     if (size === "M") return productAvailability.size_m_quantity > 0;
+    if (size === "L") return productAvailability.size_l_quantity > 0; // ✅ ДОБАВЬ
     if (size === "Единый размер") return productAvailability.size_c_quantity > 0;
-
+  
     return false;
   };
+  
 
   return (
     <StyledBasket>
