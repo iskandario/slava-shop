@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from "styled-components";
 import { StoreDescription } from "./store-description/StoreDescription";
 import mainPhoto from '../../../../assets/images/mainPagePhoto.jpg';
-import smallmainPhoto from '../../../../assets/images/smallMainPage.jpg';
+import smallmainPhoto from '../../../../assets/images/smallMainPage.png';
 
 type MainProps = {
   scrollToCatalog: () => void; 
@@ -30,8 +30,9 @@ const PhotoWrapper = styled.div`
   overflow: hidden;
 
   @media (max-width: 768px) {
-    padding-top: 120%; 
-    margin-top: 8vw;
+    padding-top: 17%;
+    margin-top: 0;
+    height: auto;
   }
 `;
 
@@ -47,9 +48,15 @@ const StyledImg = styled.img`
     margin-top: 4vw;
   }
 
+
   @media (max-width: 768px) {
-    object-fit: contain; /* На мобильных устройствах изображение будет целиком помещаться в контейнер */
+    position: static;
+    width: 100%;
+    max-width: 75%; 
     height: auto;
+    object-fit: contain;
+    display: block;
+    margin-left: 18%;
   }
 `;
 

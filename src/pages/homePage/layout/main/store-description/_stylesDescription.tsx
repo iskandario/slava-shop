@@ -317,7 +317,7 @@ white-space: nowrap;
 
 
   @media (max-width: 768px) {
-  font-size: 2.5vw;
+  font-size: 3vw;
   }
 
    @media (max-width: 560px) {

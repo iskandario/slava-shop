@@ -18,6 +18,9 @@ const imageUrls: { [key: string]: string } = {
   "7": "https://vyacheslavnabrand.ru/SOURCE/images/catalog/dress.jpg",
   "8": 'https://vyacheslavnabrand.ru/SOURCE/images/catalog/valentine_him.jpg',
   "9": 'https://vyacheslavnabrand.ru/SOURCE/images/catalog/valentine_her.jpg',
+  "10": 'https://vyacheslavnabrand.ru/SOURCE/images/catalog/white_podium1.jpg',
+  "11": 'https://vyacheslavnabrand.ru/SOURCE/images/catalog/blue_podium1.jpg',
+
 };
 
 type AvailabilityMap = {
@@ -25,20 +28,13 @@ type AvailabilityMap = {
     size_s_quantity: number;
     size_m_quantity: number;
     size_c_quantity: number;
-    size_l_quantity: number; // ✅ ДОБАВЬ ЭТО
+    size_l_quantity: number; 
+    size_i_quantity: number;
   };
 };
 
 
-type BasketProduct = {
-  id: string;
-  sizeSelect?: "S" | "M" | "Единый размер";
-  quantity: number;
-  price: number;
-  title: string;
-  compound: string;
-  sizes: string[];
-};
+
 
 
 export const Basket = () => {
@@ -58,7 +54,8 @@ export const Basket = () => {
           size_s_quantity: product.size_s_quantity,
           size_m_quantity: product.size_m_quantity,
           size_c_quantity: product.size_c_quantity,
-          size_l_quantity: product.size_l_quantity, // ✅ ДОБАВЬ ЭТО
+          size_l_quantity: product.size_l_quantity, 
+          size_i_quantity: product.size_i_quantity,
         };
         
         return acc;

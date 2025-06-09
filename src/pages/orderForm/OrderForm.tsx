@@ -242,12 +242,6 @@ const StyledFieldGrid = styled(Grid)`
     }
 `;
 
-const TotalPrice = styled.h2`
-  font-family: 'NEXT ART', sans-serif !important;
-  font-size: 24px;
-  font-weight: 500;
-  line-height: 1.5;
-  color: ${theme.mainTextColor};
-`;
+
 
 export default OrderForm;

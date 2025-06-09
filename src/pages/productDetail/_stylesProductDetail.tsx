@@ -35,9 +35,10 @@ export const Title = styled.h2`
   margin-top: 4vw;
   margin-bottom: 10px;
   font-weight: 600;
+  line-height: 1;
   font-size: calc(1.2vw + 5px);   
       @media (max-width: 768px) {
-        margin-top: 2vw;
+        margin-top: 1vw;
         font-size: 4.3vw;
 }
 
@@ -58,10 +59,11 @@ export const Price = styled.p`
 export const Compound = styled.p`
   margin-top: -15px; 
   margin-bottom: 30px;
-  font-size: calc(0.5vw + 5px);   
+  font-size: calc(0.7vw + 5px);   
   color: #C4C4C4;;   
         @media (max-width: 768px) {
-        font-size: 2vw;
+          font-size: calc(1.2vw + 8px); 
+          margin-top: 0.4vw;
 }
      
 `;

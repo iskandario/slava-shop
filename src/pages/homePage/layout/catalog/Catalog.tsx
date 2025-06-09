@@ -20,6 +20,11 @@ export const Catalog = forwardRef<HTMLDivElement, CatalogProps>(({ products }, r
     dress: 'https://vyacheslavnabrand.ru/SOURCE/images/catalog/dress.jpg',
     batistSet: 'https://vyacheslavnabrand.ru/SOURCE/images/catalog/batist_big.jpg',
     skirt: 'https://vyacheslavnabrand.ru/SOURCE/images/catalog/skirt.jpg',
+    whitePodium: 'https://vyacheslavnabrand.ru/SOURCE/images/catalog/white_podium1.jpg',
+    bluePodium: 'https://vyacheslavnabrand.ru/SOURCE/images/catalog/blue_podium1.jpg',
+    whitePodium4: 'https://vyacheslavnabrand.ru/SOURCE/images/catalog/white_podium4.jpg',
+    whitePodium5: 'https://vyacheslavnabrand.ru/SOURCE/images/catalog/white_podium5.jpg',
+
   };
 
   const handleCardClick = (id: string) => {
@@ -29,9 +34,9 @@ export const Catalog = forwardRef<HTMLDivElement, CatalogProps>(({ products }, r
   return (
     <StyledCatalog ref={ref}>
       <TopRow>
-        <SmallCard key={'2'} onClick={() => handleCardClick('2')}>
-          <Image src={imageUrls.jacket} alt="Жакет" />
-          <Title>Жакет →</Title>
+        <SmallCard key={'10'} onClick={() => handleCardClick('10')}>
+          <Image src={imageUrls.whitePodium} alt="Подиум платье" />
+          <Title>Podium white dress →</Title>
         </SmallCard>
 
         <DoubleCard>
@@ -43,11 +48,10 @@ export const Catalog = forwardRef<HTMLDivElement, CatalogProps>(({ products }, r
             </Title>
           </MediumCard>
 
-          <MediumCard key={'9'} onClick={() => handleCardClick('9')}>
-            <Image src={imageUrls.valentineHer} alt="Рубашка for HER" />
+          <MediumCard key={'11'} onClick={() => handleCardClick('11')}>
+            <Image src={imageUrls.bluePodium} alt="Подиум голубое платье" />
             <Title>
-              Рубашка Valentine’s → <br />
-              <ValentineLabel>for HER</ValentineLabel>
+              Podium dress → <br />
             </Title>
           </MediumCard>
         </DoubleCard>
@@ -64,16 +68,15 @@ export const Catalog = forwardRef<HTMLDivElement, CatalogProps>(({ products }, r
         </GroupedCardContainer>
 
         <StackedCard>
-          <MediumCard key={'3'} onClick={() => handleCardClick('3')}>
-            <Image src={imageUrls.corset} alt="Корсет White Swan" />
-            <Title>Корсет White Swan →</Title>
-          </MediumCard>
+  <MediumCard onClick={() => handleCardClick('10')}>
+    <Image src={imageUrls.whitePodium5} alt="Podium 5" />
+  </MediumCard>
 
-          <MediumCard key={'7'} onClick={() => handleCardClick('7')}>
-            <Image src={imageUrls.dress} alt="Платье Dream Dress" />
-            <Title>Платье Dream Dress →</Title>
-          </MediumCard>
-        </StackedCard>
+  <MediumCard onClick={() => handleCardClick('10')}>
+    <Image src={imageUrls.whitePodium4} alt="Podium 4" />
+  </MediumCard>
+</StackedCard>
+
       </BottomRow>
     </StyledCatalog>
   );
@@ -208,15 +211,13 @@ const ValentineLabel = styled.span`
 `;
 
 export const Title = styled.h3`
-  white-space: nowrap;
+  display: inline-block; /* важно */
   font-family: "Fira Mono", monospace;
   font-size: calc(1.2vw + 5px);
   font-weight: 400;
   margin-top: 1rem;
-  text-align: center;
   color: black;
-  width: fit-content;
-  border-bottom: 0.9px solid ${theme.secondaryTextColor};
+  border-bottom: 1px solid ${theme.secondaryTextColor}; /* подчёркивание только под текстом */
 
   &:hover {
     cursor: pointer;
@@ -230,6 +231,8 @@ export const Title = styled.h3`
     font-size: 3.5vw;
   }
 `;
+
+
 
 export const BatistTitle = styled.h3`
   white-space: nowrap;

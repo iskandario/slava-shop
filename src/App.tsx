@@ -76,15 +76,7 @@ function App() {
 		)
 	}
 
-	// Временное решения для локального тестирования
-	if (error) {
-		return (
-			<>
-				<AppRender/>
-				<ErrorP>Режим ошибки</ErrorP>
-			</>
-		);
-	}
+
 
 	return <AppRender/>
 }

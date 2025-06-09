@@ -40,6 +40,12 @@ const imageUrls: { [key: string]: string[] } = {
   "https://vyacheslavnabrand.ru/SOURCE/images/product_detail_photos/valentine_him3.jpg"],
   "9": ["https://vyacheslavnabrand.ru/SOURCE/images/product_detail_photos/valentine_her1.jpg",
   "https://vyacheslavnabrand.ru/SOURCE/images/product_detail_photos/valentine_her2.jpg"],
+  "10": ["https://vyacheslavnabrand.ru/SOURCE/images/product_detail_photos/white_podium1.jpg",
+  "https://vyacheslavnabrand.ru/SOURCE/images/product_detail_photos/white_podium2.jpg",
+  "https://vyacheslavnabrand.ru/SOURCE/images/product_detail_photos/white_podium3.jpg"],
+  "11": ["https://vyacheslavnabrand.ru/SOURCE/images/product_detail_photos/blue_podium1.jpg",
+  "https://vyacheslavnabrand.ru/SOURCE/images/product_detail_photos/blue_podium2.jpg",
+  "https://vyacheslavnabrand.ru/SOURCE/images/product_detail_photos/blue_podium3.jpg"],
 };
 
 const modelPaths: { [key: string]: string } = {
@@ -93,12 +99,6 @@ const ProductDetail = ({ products }: ProductDetailProps) => {
     setPressedButton(null); // Сбрасываем активную кнопку при уходе курсора
   };
   
-  const areSizesAvailable = () => {
-    if (!product) return false; // Проверяем, существует ли продукт
-    return product.sizes.length === 1 && product.sizes[0] === "Единый размер"
-      ? product.size_c_quantity > 0
-      : product.sizes.some((size) => getSizeQuantity(size) > 0);
-  };
   
   
   useEffect(() => {
@@ -146,8 +146,12 @@ const ProductDetail = ({ products }: ProductDetailProps) => {
       addToBasket(productWithSize);
       setIsAddedToBasket(true);
       setSizeError(false);
+    } else if (product.sizes.length === 1 && product.sizes[0] === "Индивидуальный пошив") {
+      const productWithSize: ProductType = { ...product, sizeSelect: "Индивидуальный пошив" };
+      addToBasket(productWithSize);
+      setIsAddedToBasket(true);
+      setSizeError(false);
     } else if (product.sizes.filter((size) => getSizeQuantity(size) > 0).length === 1) {
-      // Единственный доступный размер
       const availableSize = product.sizes.find((size) => getSizeQuantity(size) > 0);
       if (availableSize) {
         const productWithSize: ProductType = { ...product, sizeSelect: availableSize };
@@ -169,6 +173,16 @@ const ProductDetail = ({ products }: ProductDetailProps) => {
   };
 
 
+  const areSizesAvailable = () => {
+    if (!product) return false;
+    
+    // Для товаров 10 и 11 не показываем блок с размерами вообще
+    if (id === "10" || id === "11") return false;
+    
+    return product.sizes.length === 1 && product.sizes[0] === "Единый размер"
+      ? product.size_c_quantity > 0
+      : product.sizes.some((size) => getSizeQuantity(size) > 0);
+  };
 
 
 
@@ -261,104 +275,111 @@ const ProductDetail = ({ products }: ProductDetailProps) => {
           
           >
             <MobileLayout>
-              <TitleCompoundWrapper>
-              <Title>
-  {product.title.includes('for') ? (
-    <>
-      {product.title.split(' for ')[0]}
-      <ValentineLabelBlock>
-        FOR {product.title.split('for ')[1]?.toUpperCase()}
-      </ValentineLabelBlock>
-    </>
-  ) : (
-    product.title
+            <TitleCompoundWrapper>
+  <Title>
+    {product.title.includes('for') ? (
+      <>
+        {product.title.split(' for ')[0]}
+        <ValentineLabelBlock>
+          FOR {product.title.split('for ')[1]?.toUpperCase()}
+        </ValentineLabelBlock>
+      </>
+    ) : (
+      product.title
+    )}
+  </Title>
+  
+  {/* Добавляем условие только для товаров 10 и 11 */}
+  {(id === "10" || id === "11") && (
+    <IndividualTailoringTitle>
+      ИНДИВИДУАЛЬНЫЙ ПОШИВ
+    </IndividualTailoringTitle>
   )}
-</Title>
-                <Compound>{product.compound}</Compound>
-              </TitleCompoundWrapper>
+  
+  <Compound>{product.compound}</Compound>
+</TitleCompoundWrapper>
 
               <PriceSize>
               <Price>{Number(product.price).toLocaleString('ru-RU')}₽</Price>
-
-
               <PositioningWrapper>
+  <SizeSelectorWrapper>
+    {sizeError && <SizeErrorMessage>Выберите размер</SizeErrorMessage>}
+    <SizeSelector>
+  {(id === "10" || id === "11") ? null : (
+    <>
+      {product.sizes.length === 1 && product.sizes[0] === "Единый размер" ? (
+        product.size_c_quantity > 0 ? (
+          <NoSizesAvailable>Единый размер</NoSizesAvailable>
+        ) : (
+          <NoSizesAvailable>Нет в наличии</NoSizesAvailable>
+        )
+      ) : product.sizes.filter((size) => getSizeQuantity(size) > 0).length === 1 ? (
+        product.sizes.map((size) =>
+          getSizeQuantity(size) > 0 ? (
+            <OneSizeAvailable key={size}>{size}</OneSizeAvailable>
+          ) : null
+        )
+      ) : areSizesAvailable() ? (
+        product.sizes.map((size, index) => (
+          <SizeButton
+            key={size}
+            $isselected={size === selectedSize}
+            $ispressed={pressedButton === size}
+            $isavailable={getSizeQuantity(size) > 0}
+            onClick={() => {
+              setPressedButton(size);
+              setTimeout(() => setPressedButton(null), 200);
+              handleSizeChange(size);
+            }}
+          >
+            <span>{size}</span>
+            {index < product.sizes.length - 1 && <SlashDivider>/</SlashDivider>}
+          </SizeButton>
+        ))
+      ) : (
+        <NoSizesAvailable>Нет в наличии</NoSizesAvailable>
+      )}
+    </>
+  )}
+</SizeSelector>
+  </SizeSelectorWrapper>
+</PositioningWrapper>
 
-              <SizeSelectorWrapper>
-              {sizeError && <SizeErrorMessage>Выберите размер</SizeErrorMessage>}
 
-              <SizeSelector>
-                {product.sizes.length === 1 && product.sizes[0] === "Единый размер" ? (
-                  product.size_c_quantity > 0 ? (
-                    <NoSizesAvailable>Единый размер</NoSizesAvailable>
-                  ) : (
-                    <NoSizesAvailable>Нет в наличии</NoSizesAvailable>
-                  )
-                ) : product.sizes.filter((size) => getSizeQuantity(size) > 0).length === 1 ? (
-                  product.sizes.map((size) =>
-                    getSizeQuantity(size) > 0 ? (
-                      <OneSizeAvailable key={size}>{size}</OneSizeAvailable>
-                    ) : null
-                  )
-                ) : areSizesAvailable() ? (
-                  product.sizes.map((size, index) => (
-                    <SizeButton
-                      key={size}
-                      $isselected={size === selectedSize}
-                      $ispressed={pressedButton === size}
-                      $isavailable={getSizeQuantity(size) > 0}
-                      onClick={() => {
-                        setPressedButton(size);
-                        setTimeout(() => setPressedButton(null), 200);
-                        handleSizeChange(size);
-                      }}
-                    >
-                      <span>{size}</span>
-                      {index < product.sizes.length - 1 && <SlashDivider>/</SlashDivider>}
-                    </SizeButton>
-                  ))
-                ) : (
-                  <NoSizesAvailable>Нет в наличии</NoSizesAvailable>
-                )}
-              </SizeSelector>
-
-              </SizeSelectorWrapper>
-              </PositioningWrapper>
 
               </PriceSize>
 
             </MobileLayout>
 
-            {product.size_chart ? (
-            <SizeChartWrapper as="table">
-              <thead>
-                <tr>
-                  <th>Размерная сетка</th>
-                  {getHeaderNames(product.size_chart).map((key) => (
-                    <th key={key}>{getLabelText(key)}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {Object.entries(sortSizeChart(product.size_chart)).map(([size, details]) => (
-                  <tr key={size}>
-                    <td>{size}</td>
-                    {Object.entries(details).map(([key, value]) => (
-                      <td key={key}>{value}</td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </SizeChartWrapper>
-          ) : (
-            <div>Размерная сетка недоступна</div>
-          )}
+            {product.size_chart && Object.keys(product.size_chart).length > 0 && (
+  <SizeChartWrapper as="table">
+    <thead>
+      <tr>
+        <th>Размерная сетка</th>
+        {getHeaderNames(product.size_chart).map((key) => (
+          <th key={key}>{getLabelText(key)}</th>
+        ))}
+      </tr>
+    </thead>
+    <tbody>
+      {Object.entries(sortSizeChart(product.size_chart)).map(([size, details]) => (
+        <tr key={size}>
+          <td>{size}</td>
+          {Object.entries(details).map(([key, value]) => (
+            <td key={key}>{value}</td>
+          ))}
+        </tr>
+      ))}
+    </tbody>
+  </SizeChartWrapper>
+)}
 
-            {areSizesAvailable() && (
-              <StyledAddToBasketButton onClick={handleAddToBasket}>
-                Добавить в корзину
-              </StyledAddToBasketButton>
-              
-            )}
+
+{(areSizesAvailable() || id === "10" || id === "11") && (
+  <StyledAddToBasketButton onClick={handleAddToBasket}>
+    Добавить в корзину
+  </StyledAddToBasketButton>
+)}
 
           </RightGrid>
         </Grid>
@@ -483,9 +504,24 @@ const StyledBackButton = styled.div`
     
 `;
 
+const IndividualTailoringTitle = styled.div`
+font-size: calc(0.7vw + 5px);   
+color: ${theme.mainTextColor}; // Цвет как у заголовка
+  font-weight: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: -0.5em;
+  margin-bottom: 0.5em;
+  @media (max-width: 768px) {
+    font-size: calc(1.2vw + 8px); 
+    margin-top: -0.7vw;
+}
+  
+`;
+
 
 const NoSizesAvailable = styled.div`
-  font-size: calc(0.3vw + 8px);
+  font-size: calc(0.7vw + 5px);
   color: #C4C4C4;;
   font-weight: normal;
   text-align: center;
@@ -510,6 +546,17 @@ const OneSizeAvailable = styled.div`
   }
 `
 
+const SizeLabel = styled(Compound)`
+  margin-top: 8px;
+  margin-bottom: -6px;
+
+  @media (max-width: 768px) {
+    margin-top: 4px;
+    margin-bottom: -4px;
+  }
+`;
+
+
 const TitleAndPrice = styled.div`
   display: flex;
   flex-direction: column; /* Элементы в столбик по умолчанию */
@@ -525,44 +572,45 @@ const TitleAndPrice = styled.div`
 `;
 
 const PriceSize = styled.div`
-display: flex;
-gap: 1.5vw;
-flex-direction: column;
-@media (max-width: 768px) {
-align-items: flex-end;
-margin-top: 5vw;
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 4px; /* Меньше расстояние между ценой и размерами */
 
-`
+  @media (max-width: 768px) {
+    align-items: flex-end;
+    margin-top: 4vw;
+  }
+`;
+
+
+
+
 const TitleCompoundWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px; /* Добавляем расстояние между Title и Compound */
 
   @media (max-width: 768px) {
-    gap: 8px; /* Меньший отступ для мобильной версии */
+
+    gap: 10px; /* Меньший отступ для мобильной версии */
   }
 `;
 
-export const SizeSelector = styled.div`
+export const SizeSelector = styled(Compound)`
   display: flex;
-  flex-wrap: wrap; /* Разрешаем перенос строк */
-  justify-content: flex-start; /* Кнопки начинаются от левого края */
-  gap: 16px; /* Расстояние между кнопками */
-  margin-top: 10px; 
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 16px;
+  margin-top: 10px;
   transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+  font-size: calc(0.7vw + *px);   
+
   @media (max-width: 768px) {
-    margin-top: 0; /* Убираем лишние отступы */
-    justify-content: flex-end; 
+    margin-top: 0;
+    justify-content: flex-end;
+    font-size: calc(1.2vw + 8px); /* выровнено по Compound */
   }
 
-
-
-
-
-   @media(max-width: 768px){
-    margin-top: 3vw;
-  }
 `;
 
 const SizeButton = styled.div<{
@@ -574,12 +622,10 @@ const SizeButton = styled.div<{
   z-index: 10;
   align-items: center;
   justify-content: center;
-  font-size: calc(0.7vw + 8px);
   color: ${({ $isavailable, $isselected }) =>
     $isavailable ? ($isselected ? 'black' : '#333') : '#ccc'};
   font-weight: ${({ $isselected }) => ($isselected ? 'bold' : 'normal')};
   cursor: ${({ $isavailable }) => ($isavailable ? 'pointer' : 'not-allowed')};
-  opacity: ${({ $isavailable }) => ($isavailable ? 1 : 0.5)};
   transition: transform 0.2s ease, color 0.2s ease, background-color 0.2s ease;
   border-radius: 4px;
   background-color: ${({ $ispressed }) => ($ispressed ? '#ddd' : 'transparent')};

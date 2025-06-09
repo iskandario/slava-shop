@@ -1,6 +1,6 @@
 import React from 'react';
 import LargePhoto from "../../../../../assets/images/catalogmain_photo.jpg";
-import SmallPhoto from "../../../../../assets/images/smallMainPage.jpg";
+import SmallPhoto from "../../../../../assets/images/smallMainPage.png";
 import {
   FirstBigDiv, FourTextDiv,
   OneTextDiv,
