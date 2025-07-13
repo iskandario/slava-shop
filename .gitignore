@@ -3,6 +3,9 @@
 # dependencies
 /node_modules
 /.idea
+.idea
+.vscode
+/.vscode
 /.pnp
 .pnp.js
 src/firebase.ts
@@ -15,6 +18,7 @@ src/firebase.ts
 src/firebase/firebase.js
 
 # misc
+.env
 .DS_Store
 .env.local
 .env.development.local
