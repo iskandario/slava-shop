@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from "styled-components";
 import { StoreDescription } from "./store-description/StoreDescription";
-import mainPhoto from '../../../../assets/images/mainPagePhoto.jpg';
+import mainPhoto from '../../../../assets/images/mainPagePhoto.png';
 import smallmainPhoto from '../../../../assets/images/smallMainPage.png';
 
 type MainProps = {
@@ -14,7 +14,7 @@ export const Main = ({ scrollToCatalog }: MainProps) => {
       <PhotoWrapper>
         <picture>
           <source media="(max-width: 768px)" srcSet={smallmainPhoto} />
-          <StyledImg src={mainPhoto} alt="Главное фото" />
+          <StyledImg src={mainPhoto} alt="Главное фотка" />
         </picture>
       </PhotoWrapper>
       <StoreDescription scrollToCatalog={scrollToCatalog} />
@@ -26,7 +26,6 @@ const PhotoWrapper = styled.div`
   position: relative;
   margin-top: 5vw;
   width: 100%;
-  padding-top: 37.55%; 
   overflow: hidden;
 
   @media (max-width: 768px) {
@@ -37,26 +36,23 @@ const PhotoWrapper = styled.div`
 `;
 
 const StyledImg = styled.img`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
+  width: 80%;
   height: 100%;
-  object-fit: cover; /* Картинка заполнит контейнер, сохраняя пропорции */
-  
+  object-fit: cover;
+  margin-left: 10%;
+
   @media (max-width: 1000px) {
     margin-top: 4vw;
   }
 
-
   @media (max-width: 768px) {
     position: static;
+    margin-left: 0%;
     width: 100%;
-    max-width: 75%; 
     height: auto;
     object-fit: contain;
     display: block;
-    margin-left: 18%;
+    margin-top: 0;
   }
 `;
 

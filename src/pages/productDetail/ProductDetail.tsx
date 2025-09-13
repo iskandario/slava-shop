@@ -46,6 +46,8 @@ const imageUrls: { [key: string]: string[] } = {
   "11": ["https://vyacheslavnabrand.ru/SOURCE/images/product_detail_photos/blue_podium1.jpg",
   "https://vyacheslavnabrand.ru/SOURCE/images/product_detail_photos/blue_podium2.jpg",
   "https://vyacheslavnabrand.ru/SOURCE/images/product_detail_photos/blue_podium3.jpg"],
+  "12": ["https://vyacheslavnabrand.ru/SOURCE/images/product_detail_photos/daisy.png",
+  "https://vyacheslavnabrand.ru/SOURCE/images/product_detail_photos/daisy2.png",],
 };
 
 const modelPaths: { [key: string]: string } = {

@@ -24,6 +24,9 @@ export const Catalog = forwardRef<HTMLDivElement, CatalogProps>(({ products }, r
     bluePodium: 'https://vyacheslavnabrand.ru/SOURCE/images/catalog/blue_podium1.jpg',
     whitePodium4: 'https://vyacheslavnabrand.ru/SOURCE/images/catalog/white_podium4.jpg',
     whitePodium5: 'https://vyacheslavnabrand.ru/SOURCE/images/catalog/white_podium5.jpg',
+    blueShirt: 'https://vyacheslavnabrand.ru/SOURCE/images/catalog/blue_shirt.jpg',
+    daisyDress: 'https://vyacheslavnabrand.ru/SOURCE/images/catalog/daisy_dress.png',
+
 
   };
 
@@ -68,12 +71,15 @@ export const Catalog = forwardRef<HTMLDivElement, CatalogProps>(({ products }, r
         </GroupedCardContainer>
 
         <StackedCard>
-  <MediumCard onClick={() => handleCardClick('10')}>
-    <Image src={imageUrls.whitePodium5} alt="Podium 5" />
+  <MediumCard onClick={() => handleCardClick('6')}>
+    <Image src={imageUrls.blueShirt} alt="Blue" />
+              <Title>Рубашка BLUE→</Title>
   </MediumCard>
 
-  <MediumCard onClick={() => handleCardClick('10')}>
-    <Image src={imageUrls.whitePodium4} alt="Podium 4" />
+  <MediumCard onClick={() => handleCardClick('12')}>
+    <Image src={imageUrls.daisyDress} alt="Daisy" />
+                  <Title>Платье Daisy→</Title>
+
   </MediumCard>
 </StackedCard>
 
